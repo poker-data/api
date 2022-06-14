@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 app.use(
   session({
-    secret: "hpm-secret-code",
+    secret: "estetica-secret-code",
     resave: true,
     saveUninitialized: true,
   })

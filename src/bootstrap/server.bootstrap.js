@@ -12,7 +12,7 @@ const serverFunction = () => {
         .listen(PORT)
         .on("listening", () => {
           console.log(
-            `HPM server is running at hosts: ${
+            `estetica server is running at hosts: ${
               server.address().address
             } on port: ${server.address().port}`
           );
