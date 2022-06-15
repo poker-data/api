@@ -9,7 +9,6 @@ const userValidationSchema = require("../validations/userSchema");
 require("dotenv").config();
 
 router.get("/health-check", (req, res) => {
-  console.log(req.session.loggedin);
   res.json({ status: "health-ok" });
 });
 
