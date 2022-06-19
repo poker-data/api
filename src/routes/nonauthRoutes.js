@@ -74,40 +74,7 @@ router.get("/health-check", (req, res) => {
   });
 });
 
-router.post("/register", function (req, res) {
-  let data = req.body;
-  console.log(data);
-  Joi.validate(data, userValidationSchema, (err, value) => {
-    if (err) {
-      console.log("there was an error with the validation");
-      console.log(err.details[0].message);
-      res.status(422).json({
-        status: "error",
-        message: "Invalid request data",
-        data: data,
-      });
-    } else {
-      const { password } = data;
-      let user = new User({
-        ...data,
-        deleted: false,
-        password: bcrypt.hashSync(password, 10),
-      });
-      user.save((err, userDB) => {
-        if (err) {
-          return res.status(400).json({
-            ok: false,
-            err,
-          });
-        }
-        res.json({
-          ok: true,
-          user: userDB,
-        });
-      });
-    }
-  });
-});
+
 
 router.get("/logout", (req, res) => {
   req.session.destroy();

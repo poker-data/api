@@ -1,125 +1,59 @@
-/* const express = require("express");
-const User = require("../models/user");
-const Customer = require("../models/customer");
-const editUserValidationSchema = require("../validations/editUserSchema");
-const bcrypt = require("bcrypt");
-const Joi = require("joi");
+const express = require("express");
 const router = express.Router();
+const {
+  newUser,
+  getUsers,
+  getUser,
+  editUser,
+  deleteUser
+} = require("../controllers/userController")
+const { newDate } = require("../controllers/dateController")
 
-const cloudinary = require("cloudinary");
-const customer = require("../models/customer");
-cloudinary.config({
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+// /api/register  POST
+/* This is a post request to the route /register. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+database. */
+router.post("/register", function (req, res) {
+  newUser(req, res);
 });
 
+// /api/users GET
+/* This is a get request to the route /users. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+database. */
 router.get("/users", async (req, res) => {
-  try {
-    const users = await User.find({});
-    //console.log(users);
-    if (users.length > 0) {
-      const filteredUsers = users.filter((user) => user.delete === false);
-      res.json({ filteredUsers });
-    } else {
-      res.json("There are not users");
-    }
-  } catch (e) {
-    //console.log(e);
-    res.json(e);
-  }
+  getUsers(req, res);
 });
 
+// /api/users/:id GET
+/* This is a get request to the route /users/:id. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+database. */
 router.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findById(id);
-    if (user) {
-      res.json(user);
-    } else {
-      res.json("No user found");
-    }
-  } catch (e) {
-    res.json(e);
-  }
+  getUser(req, res);
 });
 
+// /api/users/:id PUT
+/* This is a put request to the route /users/:id. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+database. */
 router.put("/users/:_id", async (req, res) => {
-  let data = req.body;
-  let _id = req.params._id;
-  console.log(data);
-  Joi.validate(data, editUserValidationSchema, (err, value) => {
-    if (err) {
-      console.log("there was an error with the validation");
-      console.log(err.details[0].message);
-      res.status(422).json({
-        status: "error",
-        message: "Invalid request data",
-        data: data,
-      });
-    } else {
-      const { password } = data;
-      let dataToWrite = {
-        name: data.name,
-        email: data.email,
-        role: data.role,
-      };
-      if (password) {
-        dataToWrite.password = bcrypt.hashSync(password, 10);
-      }
-      User.updateOne(
-        { _id: _id },
-        {
-          $set: {
-            ...dataToWrite,
-          },
-        },
-        function (error, info) {
-          if (error) {
-            res.json({
-              result: false,
-              msg: "Fail to modify user",
-              err,
-            });
-          } else {
-            res.json({
-              result: true,
-              info: info,
-            });
-          }
-        }
-      );
-    }
-  });
+  editUser(req, res);
 });
 
 
 router.delete("/users/:_id", async (req, res) => {
-  let _id = req.params._id;
-  console.log(req.params);
-  User.updateOne(
-    { _id: _id },
-    {
-      $set: {
-        delete: true,
-      },
-    },
-    function (error, info) {
-      if (error) {
-        res.json({
-          result: false,
-          msg: "Fail to delete user",
-          err,
-        });
-      } else {
-        res.json({
-          result: true,
-          info: info,
-        });
-      }
-    }
-  );
-}); */
+  deleteUser(req, res);
+});
+
+
+// /api/date POST
+/* A post request to the route /date. It is receiving the data from the body of the request
+and validating it with the dateValidationSchema. If the data is valid, it is saving the date to the
+database. */
+router.post("/date", async (req, res) => {
+  newDate(req, res);
+})
 
 /* router.get("/customers", async (req, res) => {
   try {

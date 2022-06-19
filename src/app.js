@@ -19,17 +19,17 @@ app.use(express.static(__dirname + "/public"));
 
 /*Routers used*/
 const nonauthRoutes = require("./routes/nonauthRoutes");
+const apiRoutes = require("./routes/apiRoutes");
 
 //const authenticatedRoutes = require("./routes/authRoutes");
-//const apiRoutes = require("./routes/apiRoutes");
 //const invoicesRoutes = require("./routes/invoices/invoicesRoutes");
 
 
 /*Routes*/
 app.use("/", nonauthRoutes);
+app.use("/api/", apiRoutes);
 
 //app.use("/", authenticatedRoutes);
-//app.use("/api/", apiRoutes);
 //app.use("/api/", invoicesRoutes);
 
 /* Invalid routes final middleware */
