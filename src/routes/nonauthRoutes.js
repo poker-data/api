@@ -6,12 +6,22 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const userValidationSchema = require("../validations/userSchema");
-require("dotenv").config();
+//require("dotenv").config();
 
 router.get("/health-check", (req, res) => {
   res.json({ status: "health-ok" });
 });
 
+router.get("/playerData", async (req, res) => {
+  try {
+    let url = `${config.get('url_services')}/${config.get('player_stadistics')}`;
+ 
+     console.log("llego")
+    res.json({url: "https://api.dota2.net/IDOTA2Match_570/GetLiveLeagueGames/v0001/?key=${process.env.API_KEY}"})
+  } catch (err) {
+    res.status(400).json(err);
+  }
+}); 
 /* router.post("/login", (req, res) => {
   let body = req.body;
   console.log("Post received: " + JSON.stringify(body));

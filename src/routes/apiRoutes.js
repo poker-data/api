@@ -8,6 +8,7 @@ const {
   deleteUser
 } = require("../controllers/userController")
 const { newDate } = require("../controllers/dateController")
+const config = require('config');
 
 // /api/register  POST
 /* This is a post request to the route /register. It is receiving the data from the body of the request
@@ -54,23 +55,19 @@ database. */
 router.post("/date", async (req, res) => {
   newDate(req, res);
 })
-
-/* router.get("/customers", async (req, res) => {
+ router.get("/playerData/:playerName", async (req, res) => {
+  let playerName = req.params.playerName;
   try {
-    const customersList = await Customer.find({});
-    if (customersList.length > 0) {
-      const customers = customersList.filter(
-        (customer) => customer.delete === false
-      );
 
-      res.json({ customers });
-    } else {
-      res.json("There are no customers");
-    }
+    let url = config.get(`url_services.player_info`);
+    url = `${url}/${playerName}`;
+
+    res.json({url: url})
   } catch (err) {
+    console.log("salio")
     res.status(400).json(err);
   }
-}); */
+}); 
 
 /* router.delete("/customer/:_id", function (req, res) {
   let _id = req.params._id;

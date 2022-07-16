@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const editUserValidationSchema = require("../validations/editUserSchema");
+const editUserValidationSchema = require("../validations/userSchema");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const userValidationSchema = require("../validations/userSchema");
