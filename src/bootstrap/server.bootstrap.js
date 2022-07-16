@@ -12,7 +12,7 @@ const serverFunction = () => {
         .listen(PORT)
         .on("listening", () => {
           console.log(
-            `estetica server is running at hosts: ${
+            `PokerData server: ${
               server.address().address
             } on port: ${server.address().port}`
           );

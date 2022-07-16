@@ -1,5 +1,5 @@
 {
     "url_services": {
-        "player_info": "url de servicio"
+        "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/ipoker/players"
       }
 }

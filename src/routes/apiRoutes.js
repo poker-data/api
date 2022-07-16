@@ -9,6 +9,11 @@ const {
 } = require("../controllers/userController")
 const { newDate } = require("../controllers/dateController")
 const config = require('config');
+const axios = require('axios');
+require('dotenv').config()
+
+const parser = require('xml2json');
+const { process } = require("joi/lib/errors");
 
 // /api/register  POST
 /* This is a post request to the route /register. It is receiving the data from the body of the request
@@ -55,14 +60,29 @@ database. */
 router.post("/date", async (req, res) => {
   newDate(req, res);
 })
+
  router.get("/playerData/:playerName", async (req, res) => {
   let playerName = req.params.playerName;
   try {
 
     let url = config.get(`url_services.player_info`);
-    url = `${url}/${playerName}`;
+    url = `${url}/${playerName}/statistics`;
+    
+    
+   const res = await axios.get(url, {
+      headers:{
+         Accept: 'application/xml',
+        'Username':'',
+        'Password':''
+      }
+    });
 
-    res.json({url: url})
+    let data = res.data.Response.PlayerResponse//data.Response.PlayerResponse;
+    console.log(data) 
+    res.json({
+      result: true,
+      info: data,
+    });
   } catch (err) {
     console.log("salio")
     res.status(400).json(err);

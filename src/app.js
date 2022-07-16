@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 app.use(
   session({
-    secret: "estetica-secret-code",
+    secret: "pokerdata_backend",
     resave: true,
     saveUninitialized: true,
   })
