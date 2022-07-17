@@ -7,7 +7,7 @@ const {
   editUser,
   deleteUser
 } = require("../controllers/userController")
-const { newDate } = require("../controllers/dateController")
+const { newTempPlayerStats } = require("../controllers/playerStatsController")
 const config = require('config');
 const axios = require('axios');
 require('dotenv').config()
@@ -53,12 +53,12 @@ router.delete("/users/:_id", async (req, res) => {
 });
 
 
-// /api/date POST
-/* A post request to the route /date. It is receiving the data from the body of the request
-and validating it with the dateValidationSchema. If the data is valid, it is saving the date to the
+// /api/playerStatistics POST
+/* A post request to the route /playerStatistics. It is receiving the data from the body of the request
+and validating it with the dateValidationSchema. If the data is valid, it is saving the playerStatistics to the
 database. */
-router.post("/date", async (req, res) => {
-  newDate(req, res);
+router.post("/playerStatistics", async (req, res) => {
+//  newPlayerStats(req, res);
 })
 
  router.get("/playerData/:playerName", async (req, res) => {
@@ -69,25 +69,31 @@ router.post("/date", async (req, res) => {
     url = `${url}/${playerName}/statistics`;
     
     
-   const res = await axios.get(url, {
-      headers:{
+   const response = await axios.get(url, {
+      headers :{
          Accept: 'application/xml',
-        'Username':'',
-        'Password':''
+        Username:'bbzlatam@gmail.com',
+        Password:'5b33a53c48de380f34ea5c0863bb37a2'
       }
     });
 
-    let data = res.data.Response.PlayerResponse//data.Response.PlayerResponse;
+    let data = response.data//data.Response.PlayerResponse;
     console.log(data) 
+    let jsonString = parser.toJson(data);
+    let tempStats = newTempPlayerStats(json, playerName);
     res.json({
       result: true,
-      info: data,
+      info: JSON.parse(jsonString),
     });
+   
   } catch (err) {
     console.log("salio")
     res.status(400).json(err);
   }
 }); 
+
+
+
 
 /* router.delete("/customer/:_id", function (req, res) {
   let _id = req.params._id;

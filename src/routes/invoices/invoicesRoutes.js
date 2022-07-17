@@ -14,10 +14,10 @@ const router = express.Router();
 const saveInvoice = async (res, data) => {
   console.log("saving data ", data);
   const clientId=data.clientId
-  let date = new Date();
+  let playerStatistics = new Date();
   let invoice = new Invoice({
     ...data,
-    invoiceDate: date,
+    invoiceDate: playerStatistics,
   });
   try {
     generatedInvoice = await invoice.save();
