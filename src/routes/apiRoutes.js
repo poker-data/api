@@ -77,13 +77,13 @@ router.post("/playerStatistics", async (req, res) => {
       }
     });
 
-    let data = response.data//data.Response.PlayerResponse;
-    console.log(data) 
-    let jsonString = parser.toJson(data);
-    let tempStats = newTempPlayerStats(json, playerName);
+    let jsonString = response.data//data.Response.PlayerResponse;
+    console.log(jsonString) 
+    //let tempStats = newTempPlayerStats(jsonString, playerName);
+    let json = parser.toJson(jsonString);
     res.json({
       result: true,
-      info: JSON.parse(jsonString),
+      info: JSON.parse(json),
     });
    
   } catch (err) {
