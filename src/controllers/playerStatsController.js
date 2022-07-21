@@ -1,4 +1,3 @@
-const parser = require('xml2json');
 const config = require('config');
 const axios = require('axios');
 var parseString = require('xml2js').parseString;
@@ -15,20 +14,15 @@ const playerStatsController = async (req) => {
 
             const response = await axios.get(url, {
                 headers: {
-                    Accept: 'application/xml',
-                    Username: 'bbzlatam@gmail.com',
-                    Password: '5b33a53c48de380f34ea5c0863bb37a2'
+                    Accept: 'application/json',
+                    Username: process.env.USERNAMEAPI,
+                    Password: process.env.PASSWORDAPI
                 }
             });
 
             const jsonString = await response.data//data.Response.PlayerResponse;
 
-            let formatJson = {}
-            parseString(jsonString, function (err, result) {
-                formatJson = result;
-            })
-
-            return formatJson;
+            return jsonString;
 
         } catch (err) {
             console.log(err)
