@@ -7,13 +7,47 @@ const {
   editUser,
   deleteUser
 } = require("../controllers/userController")
-const { newTempPlayerStats } = require("../controllers/playerStatsController")
-const config = require('config');
-const axios = require('axios');
+const { playerStatsController } = require("../controllers/playerStatsController")
 require('dotenv').config()
 
-const parser = require('xml2json');
-const { process } = require("joi/lib/errors");
+
+// /api/playerStatistics POST
+/* A post request to the route /playerStatistics. It is receiving the data from the body of the request
+and validating it with the dateValidationSchema. If the data is valid, it is saving the playerStatistics to the
+database. */
+router.get("/playerData/:playerName", async (req, res) => {
+  //  newPlayerStats(req, res);
+  try {
+    console.log('llegue')
+    let services = [ playerStatsController(req) ]
+
+    let [ newPlayerStats ] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          error: err,
+          stats: false
+        }
+      })
+    ))
+    
+    console.log(newPlayerStats)
+
+    res.status(200).json({
+      ok: true,
+      info: newPlayerStats
+    })
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
 
 // /api/register  POST
 /* This is a post request to the route /register. It is receiving the data from the body of the request
@@ -53,47 +87,19 @@ router.delete("/users/:_id", async (req, res) => {
 });
 
 
-// /api/playerStatistics POST
-/* A post request to the route /playerStatistics. It is receiving the data from the body of the request
-and validating it with the dateValidationSchema. If the data is valid, it is saving the playerStatistics to the
-database. */
-router.post("/playerStatistics", async (req, res) => {
-//  newPlayerStats(req, res);
-})
 
- router.get("/playerData/:playerName", async (req, res) => {
-  let playerName = req.params.playerName;
-  try {
 
-    let url = config.get(`url_services.player_info`);
-    url = `${url}/${playerName}/statistics`;
-    
-    
-   const response = await axios.get(url, {
-      headers :{
-         Accept: 'application/xml',
-        Username:'bbzlatam@gmail.com',
-        Password:'5b33a53c48de380f34ea5c0863bb37a2'
-      }
-    });
+router.get("/playerData/:playerName", async (req, res) => {
 
-    let jsonString = response.data//data.Response.PlayerResponse;
-    console.log(jsonString) 
-    //let tempStats = newTempPlayerStats(jsonString, playerName);
-    let json = parser.toJson(jsonString);
-    res.json({
-      result: true,
-      info: JSON.parse(json),
-    });
-   
-  } catch (err) {
-    console.log("salio")
-    res.status(400).json(err);
-  }
-}); 
+
+});
 
 
 
+
+
+
+/**  */
 
 /* router.delete("/customer/:_id", function (req, res) {
   let _id = req.params._id;
