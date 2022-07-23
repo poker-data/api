@@ -27,11 +27,19 @@ router.get("/playerData/:playerName", async (req, res) => {
         }
       })
     ))
+   //console.log(newPlayerStats, 'route')//obj respuesta de DB
 
-    res.status(200).json({
-      ok: true,
-      info: newPlayerStats
-    })
+    const checkErrorInApiResponse = newPlayerStats.status == 200 ? true : false 
+
+    if (checkErrorInApiResponse) {
+    
+      res.status(404).json({ ok: false, info: 'not found api service' })
+
+    }else{
+     // console.log(JSON.parse(newPlayerStats.tempStats), 'route')//obj respuesta de api
+      res.status(200).json({ ok: true, info: JSON.parse(newPlayerStats.tempStats) })
+    }
+
 
   } catch (error) {
     console.log(error)

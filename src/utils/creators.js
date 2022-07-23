@@ -15,7 +15,7 @@ const newStatsCreatorInDB = async (playerName, stats) => {
 
     } catch (err) {
 
-        console.log(err)
+        console.log(err, 'error saving to db');
     }
 }
 
