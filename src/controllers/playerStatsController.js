@@ -1,33 +1,16 @@
-const config = require('config');
-const axios = require('axios');
-var parseString = require('xml2js').parseString;
+const { newStatsCreatorInDB } = require('../utils/creators');
+const { apiPlayerStatistics } = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
+    let playerName = req.params.playerName;
 
     try {
-        let playerName = req.params.playerName;
-        try {
-
-            let url = config.get(`url_services.player_info`);
-            url = `${url}/${playerName}/statistics`;
-
-
-            const response = await axios.get(url, {
-                headers: {
-                    Accept: 'application/json',
-                    Username: process.env.USERNAMEAPI,
-                    Password: process.env.PASSWORDAPI
-                }
-            });
-
-            const jsonString = await response.data//data.Response.PlayerResponse;
-
-            return jsonString;
-
-        } catch (err) {
-            console.log(err)
-            return err
-        }
+        const playerData = await apiPlayerStatistics(playerName);
+        const apiStats = playerData
+        const newPlayerDbStats = await newStatsCreatorInDB(playerName, JSON.stringify(apiStats));
+        console.log(newPlayerDbStats, 'in controller');
+        //return newPlayerDbStats; para devolver el dato db con id y playerName
+        return newPlayerDbStats; // para devolver el obj de la api completo
 
     } catch (error) {
         console.log(error)

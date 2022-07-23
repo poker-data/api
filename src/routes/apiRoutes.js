@@ -11,17 +11,14 @@ const { playerStatsController } = require("../controllers/playerStatsController"
 require('dotenv').config()
 
 
-// /api/playerStatistics POST
-/* A post request to the route /playerStatistics. It is receiving the data from the body of the request
-and validating it with the dateValidationSchema. If the data is valid, it is saving the playerStatistics to the
-database. */
+// /api/playerStatistics GET
 router.get("/playerData/:playerName", async (req, res) => {
-  //  newPlayerStats(req, res);
-  try {
-    console.log('llegue')
-    let services = [ playerStatsController(req) ]
 
-    let [ newPlayerStats ] = await Promise.all(services.map(service =>
+  try {
+
+    let services = [playerStatsController(req)]
+
+    let [newPlayerStats] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(error)
         return {
@@ -30,8 +27,6 @@ router.get("/playerData/:playerName", async (req, res) => {
         }
       })
     ))
-    
-    console.log(newPlayerStats)
 
     res.status(200).json({
       ok: true,
