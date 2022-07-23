@@ -1,33 +1,17 @@
 const config = require('config');
 const axios = require('axios');
 var parseString = require('xml2js').parseString;
+const { newStatsCreator } = require('../utils/creators');
+const { apiPlayerStatistics  } = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
+    let playerName = req.params.playerName;
 
     try {
-        let playerName = req.params.playerName;
-        try {
-
-            let url = config.get(`url_services.player_info`);
-            url = `${url}/${playerName}/statistics`;
-
-
-            const response = await axios.get(url, {
-                headers: {
-                    Accept: 'application/json',
-                    Username: process.env.USERNAMEAPI,
-                    Password: process.env.PASSWORDAPI
-                }
-            });
-
-            const jsonString = await response.data//data.Response.PlayerResponse;
-
-            return jsonString;
-
-        } catch (err) {
-            console.log(err)
-            return err
-        }
+            let playerStats = await apiPlayerStatistics(playerName);
+            let stats = playerStats
+            let newStats = newStatsCreator(playerName, stats);
+            return newStats;
 
     } catch (error) {
         console.log(error)
