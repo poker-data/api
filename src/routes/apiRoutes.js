@@ -7,7 +7,7 @@ const {
   editUser,
   deleteUser
 } = require("../controllers/userController")
-const { playerStatsController } = require("../controllers/playerStatsController")
+const { playerStatsController, userMetaData,playerFilters  } = require("../controllers/playerStatsController")
 require('dotenv').config()
 
 
@@ -16,9 +16,9 @@ router.get("/playerData/:playerName", async (req, res) => {
 
   try {
 
-    let services = [playerStatsController(req)]
+    let services = [playerStatsController(req), userMetaData(req), playerFilters(req)]
 
-    let [newPlayerStats] = await Promise.all(services.map(service =>
+    let [newPlayerStats, newMetaData, playerSetFilters ] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(error)
         return {
@@ -29,7 +29,7 @@ router.get("/playerData/:playerName", async (req, res) => {
     ))
    //console.log(newPlayerStats, 'route')//obj respuesta de DB
 
-    const checkErrorInApiResponse = newPlayerStats.status == 200 ? true : false 
+/*     const checkErrorInApiResponse = newPlayerStats.status == 200 ? true : false 
 
     if (checkErrorInApiResponse) {
     
@@ -38,7 +38,8 @@ router.get("/playerData/:playerName", async (req, res) => {
     }else{
      // console.log(JSON.parse(newPlayerStats.tempStats), 'route')//obj respuesta de api
       res.status(200).json({ ok: true, info: JSON.parse(newPlayerStats.tempStats) })
-    }
+    } */
+    res.status(200).json({ok:true, info: playerSetFilters  })
 
 
   } catch (error) {
@@ -56,8 +57,8 @@ router.get("/playerData/:playerName", async (req, res) => {
 /* This is a post request to the route /register. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
-router.post("/register", function (req, res) {
-  newUser(req, res);
+router.get("/playerData/:playerName/:filter", function (req, res) {
+  
 });
 
 // /api/users GET

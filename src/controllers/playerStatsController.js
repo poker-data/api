@@ -1,5 +1,5 @@
 const { newStatsCreatorInDB } = require('../utils/creators');
-const { apiPlayerStatistics } = require('../utils/apiRequest');
+const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters} = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
     let playerName = req.params.playerName;
@@ -8,7 +8,8 @@ const playerStatsController = async (req) => {
         const apiPlayerData = await apiPlayerStatistics(playerName);
         
         const newPlayerDbStats = await newStatsCreatorInDB(playerName, JSON.stringify(apiPlayerData));
-        
+
+
         //return apiStats; para devolver el obj de la api completo
 
         return newPlayerDbStats; // para devolver el obj de la DB
@@ -20,7 +21,33 @@ const playerStatsController = async (req) => {
 
 }
 
+const userMetaData = async(req) => {
+
+    try {
+        const apiSharkMetaData = await apiUserMetaData();
+        return apiSharkMetaData;
+
+    } catch (error) {
+        return error
+    }
+
+}
+
+const playerFilters = async(req) => {
+    let filters = req.query.filter
+    let playerName = req.params.playerName
+   
+    try {
+        const setFilters = await setApiPlayerFilters( playerName ,filters );
+        return setFilters
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports = {
     playerStatsController,
+    userMetaData,
+    playerFilters
 }
