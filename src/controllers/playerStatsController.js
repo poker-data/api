@@ -1,4 +1,4 @@
-const { newStatsCreatorInDB } = require('../utils/creators');
+const { newStatsCreatorInDB, newPlayeInDB } = require('../utils/creators');
 const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters} = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
@@ -33,7 +33,7 @@ const userMetaData = async(req) => {
 
 }
 
-const playerFilters = async(req) => {
+const playerFiltersFromApi = async(req) => {
     let filters = req.query.filter
     let playerName = req.params.playerName
    
@@ -49,5 +49,5 @@ const playerFilters = async(req) => {
 module.exports = {
     playerStatsController,
     userMetaData,
-    playerFilters
+    playerFiltersFromApi
 }

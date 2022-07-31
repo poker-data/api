@@ -1,13 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  newUser,
-  getUsers,
-  getUser,
-  editUser,
-  deleteUser
-} = require("../controllers/userController")
-const { playerStatsController, userMetaData,playerFilters  } = require("../controllers/playerStatsController")
+  playerStatsController,
+  userMetaData,
+  playerFiltersFromApi,
+} = require("../controllers/playerStatsController");
+const { newPlayerController, findPlayersController } = require("../controllers/playerController");
 require('dotenv').config()
 
 
@@ -16,31 +14,22 @@ router.get("/playerData/:playerName", async (req, res) => {
 
   try {
 
-    let services = [playerStatsController(req), userMetaData(req), playerFilters(req)]
+    let services = [playerStatsController(req), userMetaData(req), playerFiltersFromApi(req)]
 
-    let [newPlayerStats, newMetaData, playerSetFilters ] = await Promise.all(services.map(service =>
+    let [newPlayerStats, newMetaData, playerSetFilters] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(error)
         return {
-          error: err,
-          stats: false
+          ok: false,
+          info: err
         }
       })
     ))
-   //console.log(newPlayerStats, 'route')//obj respuesta de DB
-
-/*     const checkErrorInApiResponse = newPlayerStats.status == 200 ? true : false 
-
-    if (checkErrorInApiResponse) {
-    
-      res.status(404).json({ ok: false, info: 'not found api service' })
-
-    }else{
-     // console.log(JSON.parse(newPlayerStats.tempStats), 'route')//obj respuesta de api
-      res.status(200).json({ ok: true, info: JSON.parse(newPlayerStats.tempStats) })
-    } */
-    res.status(200).json({ok:true, info: playerSetFilters  })
-
+    res.status(200).json({
+      ok: true,
+      info: playerSetFilters
+    }
+    )
 
   } catch (error) {
     console.log(error)
@@ -54,19 +43,73 @@ router.get("/playerData/:playerName", async (req, res) => {
 
 
 // /api/register  POST
-/* This is a post request to the route /register. It is receiving the data from the body of the request
-and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+/* This is a post request to the route /register saving the user to the
 database. */
-router.get("/playerData/:playerName/:filter", function (req, res) {
-  
+router.post("/setPlayerData", async (req, res) => {
+  try {
+
+    let services = [newPlayerController(req)]
+
+    let [newPlayerResult] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ ok: true, info: newPlayerResult })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
 });
+
+router.get("/getPlayers", async (req, res) => {
+  try {
+
+    let services = [findPlayersController()]
+
+    let [playerData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({
+      ok: true,
+      info: playerData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+
+
+
 
 // /api/users GET
 /* This is a get request to the route /users. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
 router.get("/users", async (req, res) => {
-  getUsers(req, res);
+
 });
 
 // /api/users/:id GET
@@ -74,7 +117,7 @@ router.get("/users", async (req, res) => {
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
 router.get("/users/:id", async (req, res) => {
-  getUser(req, res);
+
 });
 
 // /api/users/:id PUT
@@ -82,12 +125,12 @@ router.get("/users/:id", async (req, res) => {
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
 router.put("/users/:_id", async (req, res) => {
-  editUser(req, res);
+
 });
 
 
 router.delete("/users/:_id", async (req, res) => {
-  deleteUser(req, res);
+
 });
 
 
@@ -191,81 +234,8 @@ router.get("/playerData/:playerName", async (req, res) => {
   );
 });
  */
-/* router.post("/customer", async (req, res) => {
-  let {
-    name,
-    lastName,
-    email,
-    phone,
-    mainAddress,
-    city,
-  } = req.body;
-
-  try {
-    Customer.find({ email: email }, function (err, customerDB) {
-      if (err) {
-        return res.json({
-          success: false,
-          msj: "Inexistent customer",
-          err,
-        });
-      }
-      if (customerDB.length > 0) {
-        Customer.updateOne(
-          { email: email },
-          {
-            $set: {
-              name,
-              lastName,
-              email,
-              phone,
-              mainAddress,
-              city,
-              delete: false,
-            },
-          },
-          function (error, info) {
-            if (error) {
-              res.json({
-                ok: false,
-                msg: "Fail to modify customer",
-                err,
-              });
-            } else {
-              res.json({
-                ok: true,
-                customer: info,
-              });
-            }
-          }
-        );
-      } else {
-        let customer = new Customer({
-          name,
-          lastName,
-          email,
-          phone,
-          mainAddress,
-          city,
-        });
-        console.log(customer);
-        customer.save((err, customerDB) => {
-          if (err) {
-            return res.status(400).json({
-              ok: false,
-              err,
-            });
-          }
-          res.json({
-            ok: true,
-            customer: customerDB,
-          });
-        });
-      }
-    });
-  } catch (err) {
-    res.status(400).json(err);
-  }
-}); */
+router.post("/player", async (req, res) => {
+  newPlayer(req, res);
+});
 
 module.exports = router;
