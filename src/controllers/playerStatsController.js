@@ -41,7 +41,7 @@ const playerFiltersFromApi = async(req) => {
         const setFilters = await setApiPlayerFilters( playerName ,filters );
         return setFilters
     } catch (error) {
-        
+        return error
     }
 }
 

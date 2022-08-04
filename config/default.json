@@ -3,9 +3,7 @@
       "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
       "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/ipoker/players",
       "services":{   
-                 "filter":"c"
-                
-                  
+                 "filter":"?filter="
         }
       }
 }
