@@ -5,7 +5,7 @@ const apiPlayerStatistics = (playerName) => {
     return new Promise((resolve, reject) => {
 
         let url = config.get(`url_services.player_info`);
-        url = `${url}/${playerName}`;
+        url = `${url}/${playerName}/statistics/`;
 
         axios.get(url, {
             headers: {
@@ -15,7 +15,7 @@ const apiPlayerStatistics = (playerName) => {
             }
         })
             .then(response => {
-               // console.log(response);
+                console.log(response.data);
                 resolve(response.data);
             })
             .catch(error => {
@@ -37,7 +37,6 @@ const apiUserMetaData = () => {
             }
         })
             .then(response => {
-                //console.log(response.data.Response.UserMetadataResponse);
                 resolve(response.data);
             })
             .catch(error => {
@@ -65,8 +64,9 @@ const setApiPlayerFilters = (playerName,filter) => {
                 // DE UTILIZAR
 
                 //imprimiendo valor de el primeer dato del array (Count)
-                console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic[0]['$']);
-                response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic.forEach(element => console.log(element['@id']))
+                //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic[0]['$']);
+                //imprimiendo cada id
+                //response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic.forEach(element => console.log(element['@id']))
                 resolve(response.data);
             })
             .catch(error => {

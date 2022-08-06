@@ -33,7 +33,7 @@ const newPlayeCreatorInDB = async (req) => {
       shkUsername,
     });
     const response = await newPlayer.save();
-    //console.log(response);
+    console.log(response);
     return response;
   } catch (err) {
     console.log(err, 'error saving user to db');

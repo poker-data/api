@@ -9,10 +9,9 @@ const playerStatsController = async (req) => {
         
         const newPlayerDbStats = await newStatsCreatorInDB(playerName, JSON.stringify(apiPlayerData));
 
-
         //return apiStats; para devolver el obj de la api completo
 
-        return newPlayerDbStats; // para devolver el obj de la DB
+        return apiPlayerData; // para devolver el obj de la DB
 
     } catch (error) {
         //console.log(error, 'error in controller');

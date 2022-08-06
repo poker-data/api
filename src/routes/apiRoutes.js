@@ -14,9 +14,41 @@ router.get("/playerData/:playerName", async (req, res) => {
 
   try {
 
-    let services = [playerStatsController(req), userMetaData(req), playerFiltersFromApi(req)]
+    let services = [playerStatsController(req)]
 
-    let [newPlayerStats, newMetaData, playerSetFilters] = await Promise.all(services.map(service =>
+    let [newPlayerStats] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: newPlayerStats
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+// /api/playerStatistics with filter GET
+router.get("/playerDataFiltered/:playerName", async (req, res) => {
+
+  try {
+
+    let services = [ playerFiltersFromApi(req)]
+
+    let [playerSetFilters] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(error)
         return {
@@ -60,7 +92,10 @@ router.post("/setPlayerData", async (req, res) => {
       })
     ))
 
-    res.status(200).json({ ok: true, info: newPlayerResult })
+    res.status(200).json({ 
+      ok: true, 
+      info: newPlayerResult
+     })
 
   } catch (error) {
     //console.log(error)
@@ -101,7 +136,34 @@ router.get("/getPlayers", async (req, res) => {
 )
 
 
+router.get("/getRooms", async (req, res) => {
+  try {
 
+    const rooms = [
+      'iPoker',
+      'GGNetwork',
+      'PokerStars',
+      '888Poker',
+      'Chico',
+      'WPN',
+      'PartyPoker',
+      'PokerStars(FR-ES-PT)',
+      'Winamax.fr'
+    ];
+
+    res.status(200).json({
+      ok: true,
+      info: rooms
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
 
 
 // /api/users GET
@@ -140,9 +202,6 @@ router.get("/playerData/:playerName", async (req, res) => {
 
 
 });
-
-
-
 
 
 
