@@ -9,7 +9,7 @@ const { newPlayerController, findPlayersController } = require("../controllers/p
 require('dotenv').config()
 
 
-// /api/playerStatistics GET
+//api/playerStatistics GET
 router.get("/playerData/:playerName", async (req, res) => {
 
   try {
@@ -41,7 +41,7 @@ router.get("/playerData/:playerName", async (req, res) => {
 
 })
 
-// /api/playerStatistics with filter GET
+//api/playerStatistics with filter GET
 router.get("/playerDataFiltered/:playerName", async (req, res) => {
 
   try {
@@ -74,7 +74,7 @@ router.get("/playerDataFiltered/:playerName", async (req, res) => {
 })
 
 
-// /api/register  POST
+//api/register  POST
 /* This is a post request to the route /register saving the user to the
 database. */
 router.post("/setPlayerData", async (req, res) => {
@@ -139,16 +139,17 @@ router.get("/getPlayers", async (req, res) => {
 router.get("/getRooms", async (req, res) => {
   try {
 
+
     const rooms = [
-      'iPoker',
-      'GGNetwork',
-      'PokerStars',
-      '888Poker',
-      'Chico',
-      'WPN',
-      'PartyPoker',
-      'PokerStars(FR-ES-PT)',
-      'Winamax.fr'
+      {room : 'iPoker',},
+      {room : 'GGNetwork',},
+      {room : 'PokerStars',},
+      {room : '888Poker',},
+      {room : 'Chico',},
+      {room : 'WPN',},
+      {room : 'PartyPoker',},
+      {room : 'PokerStars(FR-ES-PT)',},
+      {room : 'Winamax.fr'}
     ];
 
     res.status(200).json({
