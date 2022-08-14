@@ -1,7 +1,11 @@
 const config = require('config');
 const axios = require('axios');
 
-const apiPlayerStatistics = (playerName) => {
+const apiPlayerStatistics = (body) => {
+    const playerName = body.playerName;
+    const dateFrom = body.dateFrom || null;
+    const dateTo = body.dateTo || null;
+    const roomName = body.roomName || null;
     return new Promise((resolve, reject) => {
 
         let url = config.get(`url_services.player_info`);
@@ -40,17 +44,30 @@ const apiUserMetaData = () => {
                 resolve(response.data);
             })
             .catch(error => {
-                reject(error);       
+                reject(error);
             });
     });
 }
-const setApiPlayerFilters = (playerName,filter) => {
+const setApiPlayerFilters = (body) => {
     return new Promise((resolve, reject) => {
+        console.log(body)
+        const playerName = body.shkUsername;
+        const dateFrom = body.dateFrom || null;
+        const dateTo = body.dateTo || null;
+        const roomName = body.roomName || null;
 
-        let url = config.get(`url_services.player_info`);
-        url = `${url}/${playerName}/${config.get(`url_services.services.filter`)}`;
-        url = `${url}${filter}`
-        
+        let url = config.get(`url_services.player_info`).replace('room', roomName);
+        console.log(url, 'pre filtro')
+
+        if (dateFrom !== null || dateTo !== null) {
+            url = `${url}/${playerName}${config.get(`url_services.services.filter`)}`;
+            url = `${url}Date:${dateFrom}`;
+            dateTo ? url = `${url}~${dateTo}` : url = `${url}`;
+        } else {
+            url = `${url}/${playerName}`;
+        }
+
+        console.log(url, 'post filtro')
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -66,11 +83,19 @@ const setApiPlayerFilters = (playerName,filter) => {
                 //imprimiendo valor de el primeer dato del array (Count)
                 //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic[0]['$']);
                 //imprimiendo cada id
-                //response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic.forEach(element => console.log(element['@id']))
-                resolve(response.data);
+                let finalResponse = []
+                const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+                
+                if (!checkError.Error) {
+                    finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+                }
+                else {
+                    finalResponse = checkError
+                }
+                resolve(finalResponse);
             })
             .catch(error => {
-                reject(error);       
+                reject(error);
             });
     });
 }

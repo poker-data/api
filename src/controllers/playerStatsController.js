@@ -3,11 +3,16 @@ const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters} = require('..
 
 const playerStatsController = async (req) => {
     let playerName = req.params.playerName;
+    let body = req.body;
+    const dateFrom = body.dateFrom || null;
+    const dateTo = body.dateTo || null;
+    console.log(body);
 
     try {
-        const apiPlayerData = await apiPlayerStatistics(playerName);
+
+        const apiPlayerData = await apiPlayerStatistics(body);
         
-        const newPlayerDbStats = await newStatsCreatorInDB(playerName, JSON.stringify(apiPlayerData));
+       // const newPlayerDbStats = await newStatsCreatorInDB(playerName, JSON.stringify(apiPlayerData));
 
         //return apiStats; para devolver el obj de la api completo
 
@@ -33,11 +38,10 @@ const userMetaData = async(req) => {
 }
 
 const playerFiltersFromApi = async(req) => {
-    let filters = req.query.filter
-    let playerName = req.params.playerName
+    const body = req.body;
    
     try {
-        const setFilters = await setApiPlayerFilters( playerName ,filters );
+        const setFilters = await setApiPlayerFilters( body );
         return setFilters
     } catch (error) {
         return error

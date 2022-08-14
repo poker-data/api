@@ -1,7 +1,7 @@
 {
     "url_services": {
       "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
-      "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/ipoker/players",
+      "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/room/players",
       "services":{   
                  "filter":"?filter="
         }

@@ -10,7 +10,7 @@ require('dotenv').config()
 
 
 //api/playerStatistics GET
-router.get("/playerData/:playerName", async (req, res) => {
+router.post("/playerData/:playerName", async (req, res) => {
 
   try {
 
@@ -18,7 +18,7 @@ router.get("/playerData/:playerName", async (req, res) => {
 
     let [newPlayerStats] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
+        console.log(err)
         return {
           ok: false,
           info: err
@@ -42,7 +42,7 @@ router.get("/playerData/:playerName", async (req, res) => {
 })
 
 //api/playerStatistics with filter GET
-router.get("/playerDataFiltered/:playerName", async (req, res) => {
+router.post("/playerDataFiltered/:playerName", async (req, res) => {
 
   try {
 
