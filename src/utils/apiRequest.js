@@ -50,14 +50,12 @@ const apiUserMetaData = () => {
 }
 const setApiPlayerFilters = (body) => {
     return new Promise((resolve, reject) => {
-        console.log(body)
         const playerName = body.shkUsername;
         const dateFrom = body.dateFrom || null;
         const dateTo = body.dateTo || null;
         const roomName = body.roomName || null;
 
         let url = config.get(`url_services.player_info`).replace('room', roomName);
-        console.log(url, 'pre filtro')
 
         if (dateFrom !== null || dateTo !== null) {
             url = `${url}/${playerName}${config.get(`url_services.services.filter`)}`;
@@ -66,8 +64,6 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}`;
         }
-
-        console.log(url, 'post filtro')
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -76,18 +72,22 @@ const setApiPlayerFilters = (body) => {
             }
         })
             .then(response => {
-                //HERMANO ACA ESTABA HACIENDO LOG DE LOS ID PARA VER COMO OBTENERLOS. SEGURO TENGAMOS QUE HACER ALGO ASI EN EL FRONT, ME DI CUENTA QUE SIEMPRE
-                //LA KEY PARA OBTENER EL VALOR ES EL SIGNO $ INCLUSO PARA LOS VALORES QUE NO SIGNIFICAN DINERO COM LAS FECHAS O LA CANTIDAD DE JUEGOS ASI QUE VA A SER FACIL
-                // DE UTILIZAR
 
-                //imprimiendo valor de el primeer dato del array (Count)
-                //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic[0]['$']);
-                //imprimiendo cada id
                 let finalResponse = []
+                let dataTable = []
                 const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
                 
                 if (!checkError.Error) {
                     finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+                    finalResponse.map(element => {
+                        const id = element["@id"] 
+                        const value = element["$"]
+                        const obj = {[id] : value}
+                        dataTable.push(obj)
+                        })
+                    finalResponse = JSON.stringify(dataTable).replaceAll('{','').replaceAll('}','').replace('[','{').replace(']','}')
+                    finalResponse = JSON.parse(finalResponse)
+                    
                 }
                 else {
                     finalResponse = checkError
