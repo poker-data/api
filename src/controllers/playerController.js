@@ -1,8 +1,8 @@
-const { newPlayeCreatorInDB, findPlayersInDB } = require('../utils');
+const { newPlayerCreatorInDB, findPlayersInDB } = require('../utils');
 
 const newPlayerController = async (req) => {
   try {
-    const newPlayer = await newPlayeCreatorInDB(req);
+    const newPlayer = await newPlayerCreatorInDB(req);
     return newPlayer;
 
   } catch (error) {

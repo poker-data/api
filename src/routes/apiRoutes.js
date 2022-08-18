@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const {
   playerStatsController,
-  userMetaData,
   playerFiltersFromApi,
 } = require("../controllers/playerStatsController");
 const { newPlayerController, findPlayersController } = require("../controllers/playerController");
+
+const {findRoomStatsController, setRoomStatsController} = require("../controllers/roomStatsController");
+
 require('dotenv').config()
 
 
@@ -50,7 +52,6 @@ router.post("/playerDataFiltered/:playerName", async (req, res) => {
 
     let [playerSetFilters] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
         return {
           ok: false,
           info: err
@@ -135,6 +136,63 @@ router.get("/getPlayers", async (req, res) => {
 }
 )
 
+router.get("/getRoomStats", async (req, res) => {
+  try {
+
+    let services = [findRoomStatsController()]
+
+    let [roomData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({
+      ok: true,
+      info: roomData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/setRoomStats", async (req, res) => {
+  try {
+
+    let services = [setRoomStatsController(req)]
+
+    let [newRoomStats] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newRoomStats
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
 
 router.get("/getRooms", async (req, res) => {
   try {

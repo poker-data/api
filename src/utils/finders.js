@@ -1,5 +1,5 @@
 const Player = require("../models/player");
-
+const RoomStats = require("../models/roomStatistics");
 
 const findPlayersInDB = async () => {
 
@@ -12,6 +12,18 @@ const findPlayersInDB = async () => {
   }
 }
 
+const findRoomStatsInDB = async () => {
+
+  try {
+    const roomList = await RoomStats.find();
+    return roomList;
+    
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
-  findPlayersInDB
+  findPlayersInDB,
+  findRoomStatsInDB
 }

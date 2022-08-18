@@ -1,11 +1,8 @@
-const { newStatsCreatorInDB, newPlayeInDB } = require('../utils/creators');
+const { newStatsCreatorInDB, newPlayerCreatorInDB } = require('../utils/creators');
 const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters} = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
-    let playerName = req.params.playerName;
     let body = req.body;
-    const dateFrom = body.dateFrom || null;
-    const dateTo = body.dateTo || null;
     console.log(body);
 
     try {
