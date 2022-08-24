@@ -1,5 +1,5 @@
 const { newStatsCreatorInDB, newPlayerCreatorInDB } = require('../utils/creators');
-const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters} = require('../utils/apiRequest');
+const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters, setApiGroupFilters} = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
     let body = req.body;
@@ -45,9 +45,20 @@ const playerFiltersFromApi = async(req) => {
     }
 }
 
+const groupDefaultFiltersFromApi = async(req) => {
+    const body = req.body; 
+    try {
+        const setFilters = await setApiGroupFilters( body );
+        return setFilters
+    } catch (error) {
+        return error
+    }
+}
+
 
 module.exports = {
     playerStatsController,
     userMetaData,
-    playerFiltersFromApi
+    playerFiltersFromApi,
+    groupDefaultFiltersFromApi
 }

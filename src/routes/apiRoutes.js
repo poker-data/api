@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   playerStatsController,
   playerFiltersFromApi,
+  groupDefaultFiltersFromApi
 } = require("../controllers/playerStatsController");
 const { newPlayerController, findPlayersController } = require("../controllers/playerController");
 
@@ -225,11 +226,33 @@ router.get("/getRooms", async (req, res) => {
 )
 
 
-// /api/users GET
-/* This is a get request to the route /users. It is receiving the data from the body of the request
-and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
-database. */
-router.get("/users", async (req, res) => {
+router.post("/defaulGrouptFilters", async (req, res) => {
+
+  try {
+
+    let services = [ groupDefaultFiltersFromApi(req)]
+
+    let [playerSetFilters] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: playerSetFilters
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
 
 });
 
