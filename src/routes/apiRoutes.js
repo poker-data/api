@@ -13,7 +13,7 @@ require('dotenv').config()
 
 
 //api/playerStatistics GET
-router.post("/playerData/:playerName", async (req, res) => {
+router.post("/playerData", async (req, res) => {
 
   try {
 

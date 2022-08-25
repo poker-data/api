@@ -2,14 +2,14 @@ const config = require('config');
 const axios = require('axios');
 
 const apiPlayerStatistics = (body) => {
-    const playerName = body.playerName;
+    const shkUsername = body.shkUsername;
     const dateFrom = body.dateFrom || null;
     const dateTo = body.dateTo || null;
     const roomName = body.roomName || null;
     return new Promise((resolve, reject) => {
 
-        let url = config.get(`url_services.player_info`);
-        url = `${url}/${playerName}/statistics/`;
+        let url = config.get(`url_services.player_info`).replace('room', roomName);
+        url = `${url}/${shkUsername}/statistics/`;
 
         axios.get(url, {
             headers: {
@@ -18,14 +18,29 @@ const apiPlayerStatistics = (body) => {
                 Password: process.env.PASSWORDAPI,
             }
         })
-            .then(response => {
-                console.log(response.data);
-                resolve(response.data);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+        .then(response => {
+            // console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics);
+             let finalResponse = []
+             const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+             if (!checkError.Error) {
+                 finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+                 const finalObjectResponse = {}
+                 finalResponse.map(element => {
+                     const elementId = element["@id"] 
+                     const value = element["$"]
+                     finalObjectResponse[elementId] = value
+                     })
+                 finalResponse = finalObjectResponse        
+             }
+             else {
+                 finalResponse = checkError
+             }
+             resolve(finalResponse);
+         })
+         .catch(error => {
+             reject(error);
+         });
+ });
 }
 
 const apiUserMetaData = () => {
@@ -48,6 +63,8 @@ const apiUserMetaData = () => {
             });
     });
 }
+
+
 const setApiPlayerFilters = (body) => {
     return new Promise((resolve, reject) => {
         const playerName = body.shkUsername;
@@ -71,33 +88,29 @@ const setApiPlayerFilters = (body) => {
                 Password: process.env.PASSWORDAPI,
             }
         })
-            .then(response => {
-
-                let finalResponse = []
-                let dataTable = []
-                const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-                
-                if (!checkError.Error) {
-                    finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
-                    finalResponse.map(element => {
-                        const id = element["@id"] 
-                        const value = element["$"]
-                        const obj = {[id] : value}
-                        dataTable.push(obj)
-                        })
-                    finalResponse = JSON.stringify(dataTable).replaceAll('{','').replaceAll('}','').replace('[','{').replace(']','}')
-                    finalResponse = JSON.parse(finalResponse)
-                    
-                }
-                else {
-                    finalResponse = checkError
-                }
-                resolve(finalResponse);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+        .then(response => {
+            // console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics);
+             let finalResponse = []
+             const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+             if (!checkError.Error) {
+                 finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+                 const finalObjectResponse = {}
+                 finalResponse.map(element => {
+                     const elementId = element["@id"] 
+                     const value = element["$"]
+                     finalObjectResponse[elementId] = value
+                     })
+                 finalResponse = finalObjectResponse        
+             }
+             else {
+                 finalResponse = checkError
+             }
+             resolve(finalResponse);
+         })
+         .catch(error => {
+             reject(error);
+         });
+ });
 }
 
 const setApiGroupFilters = (body) => {
@@ -132,9 +145,7 @@ const setApiGroupFilters = (body) => {
             .then(response => {
                // console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics);
                 let finalResponse = []
-                let dataTable = []
                 const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-                
                 if (!checkError.Error) {
                     finalResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
                     const finalObjectResponse = {}
@@ -143,12 +154,12 @@ const setApiGroupFilters = (body) => {
                         const value = element["$"]
                         finalObjectResponse[elementId] = value
                         })
-                    dataTable.push(finalObjectResponse)               
+                    finalResponse = finalObjectResponse        
                 }
                 else {
                     finalResponse = checkError
                 }
-                resolve(dataTable);
+                resolve(finalResponse);
             })
             .catch(error => {
                 reject(error);

@@ -1,6 +1,7 @@
 const playerStatistics = require("../models/playerStatistics");
 const Player = require("../models/player");
 const roomStatistics = require("../models/roomStatistics");
+const { startSession } = require("../models/roomStatistics");
 
 const newStatsCreatorInDB = async (playerName, stats) => {
 
@@ -25,6 +26,7 @@ const newRoomStatsCreatorInDB = async (stats) => {
   try {
 
     let roomStats = new roomStatistics({
+      username: stats.username,
       room: stats.room,
       profile: stats.profile,
       profit: stats.profit,

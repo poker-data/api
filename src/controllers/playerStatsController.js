@@ -3,7 +3,6 @@ const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters, setApiGroupFi
 
 const playerStatsController = async (req) => {
     let body = req.body;
-    console.log(body);
 
     try {
 

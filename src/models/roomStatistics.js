@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const roomStatistics = new Schema({
+    username: {
+        type: String,
+    },
     room: {
         type: String,
     },
