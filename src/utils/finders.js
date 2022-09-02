@@ -1,5 +1,6 @@
 const Player = require("../models/player");
 const RoomStats = require("../models/roomStatistics");
+const Group = require("../models/group");
 
 const findPlayersInDB = async () => {
 
@@ -22,8 +23,20 @@ const findRoomStatsInDB = async () => {
     return error
   }
 }
+const findGroupsInDB = async () => {
+    try {
+      console.log("llegue")
+      const groupList = await Group.find();
+      console.log(groupList, "groupList")
+      return groupList;
+      
+    } catch (error) {
+      return error
+    }
+}
 
 module.exports = {
   findPlayersInDB,
-  findRoomStatsInDB
+  findRoomStatsInDB,
+  findGroupsInDB
 }

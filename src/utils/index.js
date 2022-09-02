@@ -1,5 +1,5 @@
-const { findPlayersInDB, findRoomStatsInDB } = require('./finders')
-const { newStatsCreatorInDB, newPlayerCreatorInDB, newRoomStatsCreatorInDB } = require('./creators')
+const { findPlayersInDB, findRoomStatsInDB, findGroupsInDB } = require('./finders')
+const { newStatsCreatorInDB, newPlayerCreatorInDB, newRoomStatsCreatorInDB, newGroupCreatorInDB } = require('./creators')
 const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters } = require('./apiRequest')
 
 module.exports = {
@@ -11,4 +11,6 @@ module.exports = {
     setApiPlayerFilters,
     findRoomStatsInDB,
     newRoomStatsCreatorInDB,
+    findGroupsInDB,
+    newGroupCreatorInDB
 }

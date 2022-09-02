@@ -9,6 +9,8 @@ const { newPlayerController, findPlayersController } = require("../controllers/p
 
 const {findRoomStatsController, setRoomStatsController} = require("../controllers/roomStatsController");
 
+const { getGroupController, setGroupController } = require("../controllers/groupController");
+
 require('dotenv').config()
 
 
@@ -198,7 +200,6 @@ router.post("/setRoomStats", async (req, res) => {
 router.get("/getRooms", async (req, res) => {
   try {
 
-
     const rooms = [
       {room : 'iPoker',},
       {room : 'GGNetwork',},
@@ -224,15 +225,104 @@ router.get("/getRooms", async (req, res) => {
   }
 }
 )
+router.get("/getDefaultFilters", async (req, res) => {
+  try {
+    
+    const defaultFilters = [
+      {id:1,filterType : 'filterType1',},
+      {id:2,filterType : 'filterType2',},
+      {id:3,filterType : 'filterType3',},
+      {id:4,filterType : 'filterType4',},
+      {id:5,filterType : 'filterType5',}  
+    ];
 
+    res.status(200).json({
+      ok: true,
+      info: defaultFilters
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
 
-router.post("/defaulGrouptFilters", async (req, res) => {
+router.get("/getGroups", async (req, res) => {
+  try {
+    let services = [getGroupController()]
+
+    let [groups] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+   if(groups?.length > 0 ){
+    res.status(200).json({
+      ok: true,
+      info: groups
+    })
+   }else{
+    res.status(400).json({
+      ok: false,
+      info: groups
+    })
+   }
+  
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/setGroup", async (req, res) => {
+  try {
+
+    let services = [setGroupController(req)]
+
+    let [newGroup] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newGroup
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/getDefaultGroupFiltersData", async (req, res) => {
 
   try {
 
     let services = [ groupDefaultFiltersFromApi(req)]
 
-    let [playerSetFilters] = await Promise.all(services.map(service =>
+    let [groupData] = await Promise.all(services.map(service =>
       service.catch(err => {
         return {
           ok: false,
@@ -242,7 +332,7 @@ router.post("/defaulGrouptFilters", async (req, res) => {
     ))
     res.status(200).json({
       ok: true,
-      info: playerSetFilters
+      info: groupData
     }
     )
 

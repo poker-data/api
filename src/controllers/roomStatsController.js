@@ -5,7 +5,7 @@ const { newRoomStatsCreatorInDB } = require('../utils');
 
 const setRoomStatsController = async (req) => {
 
-    let body = req.body;
+    const body = req.body;
 
     try {
       const roomStats = await newRoomStatsCreatorInDB(body);

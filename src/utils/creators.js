@@ -1,13 +1,14 @@
 const playerStatistics = require("../models/playerStatistics");
 const Player = require("../models/player");
 const roomStatistics = require("../models/roomStatistics");
+const Group = require("../models/group");
 const { startSession } = require("../models/roomStatistics");
 
 const newStatsCreatorInDB = async (playerName, stats) => {
 
   try {
 
-    let newStats = new playerStatistics({
+    const newStats = new playerStatistics({
       tempStats: stats,
       playerName,
     });
@@ -25,7 +26,7 @@ const newRoomStatsCreatorInDB = async (stats) => {
 
   try {
 
-    let roomStats = new roomStatistics({
+    const roomStats = new roomStatistics({
       username: stats.username,
       room: stats.room,
       profile: stats.profile,
@@ -53,8 +54,24 @@ const newRoomStatsCreatorInDB = async (stats) => {
   }
 }
 
+const newGroupCreatorInDB = async ({groupName}) => {
+console.log(groupName, 'groupname')
+  try {
+   
+    const newGroup = new Group({
+      groupName,
+    });
+    const response = await newGroup.save();
+    console.log(response);
+    return response;
+  } catch (err) {
+    console.log(err, 'error saving group to db');
+    return err
+  }
+}
+
 const newPlayerCreatorInDB = async (req) => {
-  let {
+  const {
     playerName,
     shkUsername,
   } = req.body;
@@ -79,4 +96,5 @@ module.exports = {
   newStatsCreatorInDB,
   newPlayerCreatorInDB,
   newRoomStatsCreatorInDB,
+  newGroupCreatorInDB,
 }
