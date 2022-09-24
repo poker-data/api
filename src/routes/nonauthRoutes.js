@@ -2,93 +2,44 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
-const userValidationSchema = require("../validations/userSchema");
 //require("dotenv").config();
+const { newUserController, loginUserController } = require("../controllers/userController");
+
 
 router.get("/health-check", (req, res) => {
   res.json({ status: "health-ok" });
 });
 
-router.get("/playerData", async (req, res) => {
-  try {
-    let url = `${config.get('url_services')}/${config.get('player_stadistics')}`;
- 
-     console.log("llego")
-    res.json({url: "https://api.dota2.net/IDOTA2Match_570/GetLiveLeagueGames/v0001/?key=${process.env.API_KEY}"})
-  } catch (err) {
-    res.status(400).json(err);
-  }
-}); 
-/* router.post("/login", (req, res) => {
-  let body = req.body;
-  console.log("Post received: " + JSON.stringify(body));
-  if (req.session.loggedin) {
-    return res.json({ status: "logged" });
-    // return res.redirect("/filter");
-  }
-  // TODO: Implement login
-  let userFilter = {};
-  if (req.body.name) {
-    userFilter = { name: req.body.name };
-  }
-  if (req.body.email) {
-    userFilter = { email: req.body.email };
-  }
 
-  console.log("User filter received ", userFilter);
-  User.findOne(userFilter, (erro, userDB) => {
-    if (erro) {
-      return res.status(500).json({
-        ok: false,
-        err: erro,
-      });
-    }
+ router.post("/login", async (req, res) => {
+    try {
+      const token = await loginUserController(req);
 
-    if (!userDB || userDB === undefined) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: "Incorrect user or password",
-        },
-      });
+      res.header('auth-token', token).json({
+        ok: true,
+        info: token
+    })
+    } catch (error) {
+      res.json({ error });
     }
-    if (!bcrypt.compareSync(body.password, userDB.password)) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: "Incorrect user or password",
-        },
-      });
-    }
-
-    let token = jwt.sign(
-      {
-        user: userDB,
-      },
-      process.env.SEED_AUTENTICACION,
-      {
-        expiresIn: process.env.CADUCIDAD_TOKEN,
-      }
-    );
-    req.session.loggedin = true;
-    console.log("logueando");
-    console.log(req.session.loggedin);
-    res.json({
-      ok: true,
-      user: userDB,
-      token,
-    });
-  });
 });
 
+router.post("/register",async (req, res) => {
+  try {
+    const newUser = await newUserController(req);
+    res.status(200).json({
+      ok: true,
+      info: newUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      ok: false,
+      info: error,
+    });
+  }
 
+});
 
-router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.json({ status: "loggedout" });
-}); */
 
 module.exports = router;

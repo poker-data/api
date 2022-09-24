@@ -1,4 +1,4 @@
-const { newPlayerCreatorInDB, findPlayersInDB } = require('../utils');
+const { newPlayerCreatorInDB, findPlayersInDB, newUserCreatorInDB } = require('../utils');
 
 const newPlayerController = async (req) => {
   try {
@@ -22,7 +22,10 @@ catch (error) {
     }
 }
 
+
+
 module.exports = {
     newPlayerController,
-    findPlayersController
+    findPlayersController,
+    newUserController
 }

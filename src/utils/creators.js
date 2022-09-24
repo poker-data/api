@@ -1,8 +1,36 @@
 const playerStatistics = require("../models/playerStatistics");
 const Player = require("../models/player");
+const User = require("../models/user");
 const roomStatistics = require("../models/roomStatistics");
 const Group = require("../models/group");
 const { startSession } = require("../models/roomStatistics");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const newUserCreatorInDB = async (req) => {
+
+  const isEmailExist = await User.findOne({ email: req.body.email });
+  if (isEmailExist) {
+    return ({ error: 'Email ya registrado'})
+
+  }
+  // hash contraseña
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
+
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: password,
+    role: req.body.role,
+  });
+  try {
+    const savedUser = await user.save();
+    return savedUser
+  } catch (error) {
+    return error
+  }
+}
 
 const newStatsCreatorInDB = async (playerName, stats) => {
 
@@ -54,10 +82,10 @@ const newRoomStatsCreatorInDB = async (stats) => {
   }
 }
 
-const newGroupCreatorInDB = async ({groupName}) => {
-console.log(groupName, 'groupname')
+const newGroupCreatorInDB = async ({ groupName }) => {
+  console.log(groupName, 'groupname')
   try {
-   
+
     const newGroup = new Group({
       groupName,
     });
@@ -97,4 +125,5 @@ module.exports = {
   newPlayerCreatorInDB,
   newRoomStatsCreatorInDB,
   newGroupCreatorInDB,
+  newUserCreatorInDB
 }

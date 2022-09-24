@@ -1,7 +1,9 @@
 const express = require("express");
-var session = require("express-session");
-var cors = require("cors");
+const session = require("express-session");
+const cors = require("cors");
 require("dotenv").config();
+
+const { verifyToken } = require("./middlewares/authMiddleware");
 
 const app = express();
 app.use(
