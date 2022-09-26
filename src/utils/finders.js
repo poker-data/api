@@ -25,9 +25,9 @@ const findRoomStatsInDB = async () => {
 }
 const findGroupsInDB = async () => {
     try {
-      console.log("llegue")
+     // console.log("llegue")
       const groupList = await Group.find();
-      console.log(groupList, "groupList")
+      //console.log(groupList, "groupList")
       return groupList;
       
     } catch (error) {

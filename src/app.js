@@ -1,11 +1,11 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
+
 require("dotenv").config();
 
-const { verifyToken } = require("./middlewares/authMiddleware");
-
 const app = express();
+
 app.use(
   session({
     secret: "pokerdata_backend",
@@ -23,16 +23,9 @@ app.use(express.static(__dirname + "/public"));
 const nonauthRoutes = require("./routes/nonauthRoutes");
 const apiRoutes = require("./routes/apiRoutes");
 
-//const authenticatedRoutes = require("./routes/authRoutes");
-//const invoicesRoutes = require("./routes/invoices/invoicesRoutes");
-
-
 /*Routes*/
 app.use("/", nonauthRoutes);
 app.use("/api/", apiRoutes);
-
-//app.use("/", authenticatedRoutes);
-//app.use("/api/", invoicesRoutes);
 
 /* Invalid routes final middleware */
 app.use(function (_, res) {

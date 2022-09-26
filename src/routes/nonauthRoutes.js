@@ -14,7 +14,7 @@ router.get("/health-check", (req, res) => {
  router.post("/login", async (req, res) => {
     try {
       const token = await loginUserController(req);
-
+      
       res.header('auth-token', token).json({
         ok: true,
         info: token

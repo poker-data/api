@@ -26,6 +26,5 @@ catch (error) {
 
 module.exports = {
     newPlayerController,
-    findPlayersController,
-    newUserController
+    findPlayersController
 }

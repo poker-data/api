@@ -11,7 +11,14 @@ const {findRoomStatsController, setRoomStatsController} = require("../controller
 
 const { getGroupController, setGroupController } = require("../controllers/groupController");
 
+const { verifyToken } = require("../middlewares/authMiddleware");
+
 require('dotenv').config()
+
+
+router.get("/health-check" ,verifyToken ,(req, res) => {
+  res.json({ status: "health-ok" });
+});
 
 
 //api/playerStatistics GET
@@ -110,9 +117,9 @@ router.post("/setPlayerData", async (req, res) => {
   }
 });
 
-router.get("/getPlayers", async (req, res) => {
+router.get("/getPlayers", verifyToken ,async (req, res) => {
   try {
-
+    console.log(req.headers['auth-token'])
     let services = [findPlayersController()]
 
     let [playerData] = await Promise.all(services.map(service =>
