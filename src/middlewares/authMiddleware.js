@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
         if (!token) return res.status(401).json({ ok: false, info: 'Access denied' })
         next() 
     } catch (error) {
-        res.status(401).json({ ok: false, info: 'Invalid token' })
+        res.status(498).json({ ok: false, info: 'Invalid token' })
     }
 }
 

@@ -13,7 +13,8 @@ const loginUser = async (req) => {
     // create token
     const token = jwt.sign({
         name: user.name,
-        id: user._id
+        id: user._id,
+        mail: user.email
     }, process.env.TOKEN_SECRET)
 
     const formatUser = { _id: user._id, name: user.name, email: user.email, role: user.role }

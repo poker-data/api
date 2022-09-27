@@ -22,7 +22,7 @@ router.get("/health-check" ,verifyToken ,(req, res) => {
 
 
 //api/playerStatistics GET
-router.post("/playerData", async (req, res) => {
+router.post("/playerData", verifyToken, async (req, res) => {
 
   try {
 
@@ -119,7 +119,6 @@ router.post("/setPlayerData", async (req, res) => {
 
 router.get("/getPlayers", verifyToken ,async (req, res) => {
   try {
-    console.log(req.headers['auth-token'])
     let services = [findPlayersController()]
 
     let [playerData] = await Promise.all(services.map(service =>
