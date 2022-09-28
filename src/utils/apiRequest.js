@@ -73,14 +73,16 @@ const setApiPlayerFilters = (body) => {
         const roomName = body.roomName || null;
 
         let url = config.get(`url_services.player_info`).replace('room', roomName);
+        console.log(dateFrom)
 
         if (dateFrom !== null || dateTo !== null) {
-            url = `${url}/${playerName}${config.get(`url_services.services.filter`)}`;
+            url = `${url}/${playerName}/statistics/${config.get(`url_services.services.filter`)}`;
             url = `${url}Date:${dateFrom}`;
             dateTo ? url = `${url}~${dateTo}` : url = `${url}`;
         } else {
             url = `${url}/${playerName}`;
         }
+        console.log(url)
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -116,14 +118,14 @@ const setApiPlayerFilters = (body) => {
 const setApiGroupFilters = (body) => {
    
     return new Promise((resolve, reject) => {
-        const groupName = body.groupName || null;
+        const shkName = body.shkName || null;
         const filterType1 = body.filterType1 || null;
         const filterType2 = body.filterType2 || null;
         const filterType3 = body.filterType3 || null;
         const filterType4 = body.filterType4 || null;
         const filterType5 = body.filterType5 || null;
 
-        let url = config.get(`url_services.group_info`).replace(':group', groupName);
+        let url = config.get(`url_services.group_info`).replace(':group', shkName);
         url = `${url}${config.get(`url_services.services.filter`)}`;
         
         if (filterType1 !== null || filterType2 !== null || filterType3 !== null || filterType4 !== null || filterType5 !== null) {

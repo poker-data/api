@@ -6,6 +6,11 @@ const groupSchema = new Schema({
     type: String,
     required: true,
   },
+  shkName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   delete: {
     type: Boolean,
     default: false,

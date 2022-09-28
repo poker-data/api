@@ -82,13 +82,12 @@ const newRoomStatsCreatorInDB = async (stats) => {
   }
 }
 
-const newGroupCreatorInDB = async ({ groupName }) => {
-  console.log(groupName, 'groupname')
+const newGroupCreatorInDB = async (stats) => {
+
+console.log(stats)
   try {
 
-    const newGroup = new Group({
-      groupName,
-    });
+    let newGroup = new Group(stats);
     const response = await newGroup.save();
     console.log(response);
     return response;

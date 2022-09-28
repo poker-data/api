@@ -235,11 +235,11 @@ router.get("/getDefaultFilters", async (req, res) => {
   try {
     
     const defaultFilters = [
-      {id:1,filterType : 'filterType1',},
-      {id:2,filterType : 'filterType2',},
-      {id:3,filterType : 'filterType3',},
-      {id:4,filterType : 'filterType4',},
-      {id:5,filterType : 'filterType5',}  
+      {id:1,filterType : 'filterType1', filterName: 'MTT - Total'},
+      {id:2,filterType : 'filterType2', filterName: 'MTT - High'},
+      {id:3,filterType : 'filterType3', filterName: 'MTT - Medium'},
+      {id:4,filterType : 'filterType4', filterName: 'MTT - Low'},
+      {id:5,filterType : 'filterType5', filterName: 'SNG'}  
     ];
 
     res.status(200).json({
@@ -262,7 +262,6 @@ router.get("/getGroups", async (req, res) => {
 
     let [groups] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
         return {
           ok: false,
           info: err
