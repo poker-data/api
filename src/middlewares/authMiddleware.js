@@ -1,17 +1,14 @@
-const checkSession = async (req, res, next) => {
-  if (!req.session.loggedin) {
-    return res.redirect("/login");
-  }
-  next();
-};
+const jwt = require('jsonwebtoken')
 
-const checkLogin = async (req, res, next) => {
-  res.body= {token}
-  if(token){
-    next()
-  }
-return res.redirect("/login")
+// middleware to validate token (rutas protegidas)
+const verifyToken = (req, res, next) => {
+    try {
+        const token = req.header('auth-token')
+        if (!token) return res.status(401).json({ ok: false, info: 'Access denied' })
+        next() 
+    } catch (error) {
+        res.status(498).json({ ok: false, info: 'Invalid token' })
+    }
 }
 
-
-exports.checkSession = checkSession;
+module.exports = { verifyToken };

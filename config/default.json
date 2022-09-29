@@ -1,0 +1,10 @@
+{
+    "url_services": {
+      "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
+      "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/room/players",
+      "group_info" :"https://www.sharkscope.com/api/bbzgsa/networks/Player%20Group/players/:group/statistics",
+      "services":{   
+                 "filter":"?filter="
+        }
+      }
+}
