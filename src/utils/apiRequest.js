@@ -168,13 +168,14 @@ const setApiGroupFilters = (body) => {
             filterType4 ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
             filterType5 ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
         }
-
+        const credentials = {
+            Accept: 'application/json',
+            Username: process.env.USERNAMEAPI,
+            Password: process.env.PASSWORDAPI,
+        }
+        console.log(credentials, "credenciales de api")
         axios.get(url, {
-            headers: {
-                Accept: 'application/json',
-                Username: process.env.USERNAMEAPI,
-                Password: process.env.PASSWORDAPI,
-            }
+            headers: credentials
         })
             .then(response => {
                 // let finalResponse = []
