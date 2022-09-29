@@ -104,7 +104,7 @@ const setApiPlayerFilters = (body) => {
             //         finalResponse = finalObjectResponse        
             //     }
 
-            console.log("response de api", JSON.stringify(response))
+            console.log("response de api", response)
             let finalStatsResponse = []
             let finalDataSetResponse = []
             let tempStatsResponse = []
