@@ -89,23 +89,62 @@ const setApiPlayerFilters = (body) => {
             }
         })
         .then(response => {
-            // console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics);
-             let finalResponse = []
-             const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-             if (!checkError.Error) {
-                 finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
-                 const finalObjectResponse = {}
-                 finalResponse.map(element => {
-                     const elementId = element["@id"] 
-                     const value = element["$"]
-                     finalObjectResponse[elementId] = value
+            // let finalResponse = []
+            // const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+            //     if (!checkError.Error) {
+            //         finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+            //         //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data)
+            //         const finalObjectResponse = {}
+            //         finalResponse.map(element => {
+            //             const elementId = element["@id"] 
+            //             const value = element["$"]
+            //             finalObjectResponse[elementId] = value
+            //             })
+            //         finalResponse = finalObjectResponse        
+            //     }
+
+
+            let finalStatsResponse = []
+            let finalDataSetResponse = []
+            let tempStatsResponse = []
+            let tempDataSetResponse = []
+            const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+            if (!checStatskError.Error) {
+                tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
+               //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic)
+                const statsResponse = {}
+                tempStatsResponse.map(element => {
+                    const elementId = element["@id"] 
+                    const value = element["$"]
+                    statsResponse[elementId] = value
+                    })
+               finalStatsResponse = statsResponse 
+               //console.log(finalStatsResponse)
+              
+               tempDataSetResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data
+               //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data)
+               const dataSetResponse = {}
+               tempDataSetResponse.map( element => {
+                    //const x = element["@x"] 
+                    element.Y.map( element => {
+                        const elementId = element["@id"]
+                        const value = element["$"]
+                        dataSetResponse[elementId] = value
                      })
-                 finalResponse = finalObjectResponse        
-             }
+                    
+                    finalDataSetResponse.push(dataSetResponse)
+                    })
+            
+
+               finalResponse = {
+                stats : finalStatsResponse,
+                data: finalDataSetResponse
+               }
+                }
              else {
                  finalResponse = checkError
              }
-             resolve(finalResponse);
+           resolve(finalResponse);
          })
          .catch(error => {
              reject(error);
@@ -143,19 +182,56 @@ const setApiGroupFilters = (body) => {
             }
         })
             .then(response => {
-               // console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics);
-                let finalResponse = []
-                const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-                if (!checkError.Error) {
-                    finalResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
-                    const finalObjectResponse = {}
-                    finalResponse.map(element => {
-                        const elementId = element["@id"] 
-                        const value = element["$"]
-                        finalObjectResponse[elementId] = value
-                        })
-                    finalResponse = finalObjectResponse        
-                }
+                // let finalResponse = []
+                // const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+                // if (!checkError.Error) {
+                //     finalResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
+                //     //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data)
+                //     const finalObjectResponse = {}
+                //     finalResponse.map(element => {
+                //         const elementId = element["@id"] 
+                //         const value = element["$"]
+                //         finalObjectResponse[elementId] = value
+                //         })
+                //     finalResponse = finalObjectResponse        
+
+                    let finalStatsResponse = []
+                    let finalDataSetResponse = []
+                    let tempStatsResponse = []
+                    let tempDataSetResponse = []
+                    const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+                    if (!checStatskError.Error) {
+                       tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
+                       console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic)
+                        const statsResponse = {}
+                        tempStatsResponse.map(element => {
+                            const elementId = element["@id"] 
+                            const value = element["$"]
+                            statsResponse[elementId] = value
+                            })
+                       finalStatsResponse = statsResponse 
+                       console.log(finalStatsResponse)
+                      
+                       tempDataSetResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.StatisticalDataSet[0].Data
+                       console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.StatisticalDataSet[0].Data)
+                       const dataSetResponse = {}
+                       tempDataSetResponse.map( element => {
+                            const x = element["@x"] 
+                            element.Y.map( element => {
+                                const elementId = element["@id"]
+                                const value = element["$"]
+                                dataSetResponse[elementId] = value
+                             })
+                            
+                            finalDataSetResponse.push(dataSetResponse)
+                            })
+                    
+        
+                       finalResponse = {
+                        stats : finalStatsResponse,
+                        data: finalDataSetResponse
+                       }
+                        }
                 else {
                     finalResponse = checkError
                 }
