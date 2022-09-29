@@ -73,7 +73,6 @@ const setApiPlayerFilters = (body) => {
         const roomName = body.roomName || null;
 
         let url = config.get(`url_services.player_info`).replace('room', roomName);
-        console.log(dateFrom)
 
         if (dateFrom !== null || dateTo !== null) {
             url = `${url}/${playerName}/statistics/${config.get(`url_services.services.filter`)}`;
@@ -82,7 +81,6 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}`;
         }
-        console.log(url)
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
