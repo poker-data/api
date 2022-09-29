@@ -111,7 +111,6 @@ const setApiPlayerFilters = (body) => {
             const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
             if (!checStatskError.Error) {
                 tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
-               //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic)
                 const statsResponse = {}
                 tempStatsResponse.map(element => {
                     const elementId = element["@id"] 
@@ -119,23 +118,17 @@ const setApiPlayerFilters = (body) => {
                     statsResponse[elementId] = value
                     })
                finalStatsResponse = statsResponse 
-               //console.log(finalStatsResponse)
-              
                tempDataSetResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data
-               //console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics.StatisticalDataSet[0].Data)
-               const dataSetResponse = {}
                tempDataSetResponse.map( element => {
-                    //const x = element["@x"] 
+                let dataSetResponse = {}
                     element.Y.map( element => {
                         const elementId = element["@id"]
                         const value = element["$"]
                         dataSetResponse[elementId] = value
                      })
-                    
                     finalDataSetResponse.push(dataSetResponse)
                     })
             
-
                finalResponse = {
                 stats : finalStatsResponse,
                 data: finalDataSetResponse
@@ -202,7 +195,6 @@ const setApiGroupFilters = (body) => {
                     const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
                     if (!checStatskError.Error) {
                        tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
-                       console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic)
                         const statsResponse = {}
                         tempStatsResponse.map(element => {
                             const elementId = element["@id"] 
@@ -210,13 +202,10 @@ const setApiGroupFilters = (body) => {
                             statsResponse[elementId] = value
                             })
                        finalStatsResponse = statsResponse 
-                       console.log(finalStatsResponse)
                       
                        tempDataSetResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.StatisticalDataSet[0].Data
-                       console.log(response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.StatisticalDataSet[0].Data)
-                       const dataSetResponse = {}
                        tempDataSetResponse.map( element => {
-                            const x = element["@x"] 
+                            let dataSetResponse = {}
                             element.Y.map( element => {
                                 const elementId = element["@id"]
                                 const value = element["$"]
