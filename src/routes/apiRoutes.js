@@ -68,6 +68,7 @@ router.post("/playerDataFiltered/:playerName", async (req, res) => {
         }
       })
     ))
+    console.log("datos filtro jugador ",playerSetFilters)
     res.status(200).json({
       ok: true,
       info: playerSetFilters

@@ -73,7 +73,7 @@ const setApiPlayerFilters = (body) => {
         const roomName = body.roomName || null;
 
         let url = config.get(`url_services.player_info`).replace('room', roomName);
-
+        
         if (dateFrom !== null || dateTo !== null) {
             url = `${url}/${playerName}/statistics/${config.get(`url_services.services.filter`)}`;
             url = `${url}Date:${dateFrom}`;
@@ -81,6 +81,7 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}`;
         }
+        console.log(url,"url antes de pegarle a la apiii" );
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -103,7 +104,7 @@ const setApiPlayerFilters = (body) => {
             //         finalResponse = finalObjectResponse        
             //     }
 
-
+            console.log("response de api", response);
             let finalStatsResponse = []
             let finalDataSetResponse = []
             let tempStatsResponse = []
@@ -140,6 +141,7 @@ const setApiPlayerFilters = (body) => {
            resolve(finalResponse);
          })
          .catch(error => {
+            console.log("error de api", error);
              reject(error);
          });
  });

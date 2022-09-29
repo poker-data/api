@@ -35,7 +35,7 @@ const userMetaData = async(req) => {
 
 const playerFiltersFromApi = async(req) => {
     const body = req.body;
-   
+   console.log("body antes de reques",body)
     try {
         const setFilters = await setApiPlayerFilters( body );
         return setFilters
