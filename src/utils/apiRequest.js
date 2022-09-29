@@ -79,7 +79,7 @@ const setApiPlayerFilters = (body) => {
             url = `${url}Date:${dateFrom}`;
             dateTo ? url = `${url}~${dateTo}` : url = `${url}`;
         } else {
-            url = `${url}/${playerName}`;
+            url = `${url}/${playerName}/statistics`;
         }
         console.log(url,"url antes de pegarle a la apiii" );
         axios.get(url, {
@@ -168,12 +168,14 @@ const setApiGroupFilters = (body) => {
             filterType4 ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
             filterType5 ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
         }
+
         const credentials = {
             Accept: 'application/json',
             Username: process.env.USERNAMEAPI,
             Password: process.env.PASSWORDAPI,
         }
         console.log(credentials, "credenciales de api")
+        console.log(url, "url antes de pegarle a la apiii" );
         axios.get(url, {
             headers: credentials
         })
