@@ -81,7 +81,6 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}/statistics`;
         }
-        console.log(url,"url antes de pegarle a la apiii" );
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -104,7 +103,6 @@ const setApiPlayerFilters = (body) => {
             //         finalResponse = finalObjectResponse        
             //     }
 
-            console.log("response de api", response)
             let finalStatsResponse = []
             let finalDataSetResponse = []
             let tempStatsResponse = []
@@ -141,7 +139,6 @@ const setApiPlayerFilters = (body) => {
            resolve(finalResponse);
          })
          .catch(error => {
-            console.log("error de api", error);
              reject(error);
          });
  });
@@ -174,7 +171,6 @@ const setApiGroupFilters = (body) => {
             Username: process.env.USERNAMEAPI,
             Password: process.env.PASSWORDAPI,
         }
-        console.log(credentials, "credenciales de api")
         console.log(url, "url antes de pegarle a la apiii" );
         axios.get(url, {
             headers: credentials
