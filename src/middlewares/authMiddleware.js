@@ -5,7 +5,7 @@ const verifyToken = (req, res, next) => {
     let verified
     try {
         const token = req.header('token')
-       if (!token) return res.status(401).json({  ok: false, info: 'Access denied' })
+       //if (!token) return res.status(401).json({  ok: false, info: 'Access denied' })
        verified = jwt.verify(token, process.env.TOKEN_SECRET)
         next() 
     } catch (error) {

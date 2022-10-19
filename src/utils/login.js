@@ -9,7 +9,7 @@ const loginUser = async (req) => {
 
     const originalPassword = req.body.password;
     const hashedPassword = user.password;
-
+    
     const validPassword = await bcrypt.compare(originalPassword, hashedPassword);
 
     if (!validPassword) return false

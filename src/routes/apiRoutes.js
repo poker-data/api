@@ -16,13 +16,13 @@ const { verifyToken } = require("../middlewares/authMiddleware");
 require('dotenv').config()
 
 
-router.get("/health-check" ,verifyToken ,(req, res) => {
+router.get("/health-check" ,(req, res) => {
   res.json({ status: "health-ok" });
 });
 
 
 //api/playerStatistics GET
-router.post("/playerData", verifyToken, async (req, res) => {
+router.post("/playerData", async (req, res) => {
 
   try {
 
@@ -118,7 +118,7 @@ router.post("/setPlayerData", async (req, res) => {
   }
 });
 
-router.get("/getPlayers", verifyToken ,async (req, res) => {
+router.get("/getPlayers" ,async (req, res) => {
   try {
     let services = [findPlayersController()]
 
