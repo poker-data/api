@@ -14,11 +14,18 @@ router.get("/health-check", (req, res) => {
  router.post("/login", async (req, res) => {
     try {
       const token = await loginUserController(req);
-      if(!token) throw new Error('Invalid credentials')
-      res.header('auth-token', token).json({
-        ok: true,
-        info: token
-    })
+      if(!token) {
+        res.status(400).json({
+          ok: false,
+          info: "Invalid credentials"
+        })
+      } else {
+        res.header('auth-token', token).json({
+          ok: true,
+          info: token
+      })
+      }
+      
     } catch (error) {
       res.status(400).json({
         ok: false,
