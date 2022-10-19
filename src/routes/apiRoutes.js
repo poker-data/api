@@ -124,7 +124,7 @@ router.get("/getPlayers", verifyToken ,async (req, res) => {
 
     let [playerData] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
+        console.log(err)
         return {
           ok: false,
           info: err

@@ -7,19 +7,26 @@ const loginUser = async (req) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return false;
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    const originalPassword = req.body.password;
+    const hashedPassword = user.password;
+
+    const validPassword = await bcrypt.compare(originalPassword, hashedPassword);
+
     if (!validPassword) return false
 
     // create token
-    const token = jwt.sign({
+    const userToToken = {
         name: user.name,
         id: user._id,
         mail: user.email
-    }, process.env.TOKEN_SECRET)
+    }
+    const secret = process.env.TOKEN_SECRET
+    
+    const token = jwt.sign(userToToken, secret)
 
-    const formatUser = { _id: user._id, name: user.name, email: user.email, role: user.role }
+    const formatedUser = { _id: user._id, name: user.name, email: user.email, role: user.role }
 
-    return ({ token: token, user: formatUser })
+    return ({ token: token , user: formatedUser })
 }
 
 module.exports = {
