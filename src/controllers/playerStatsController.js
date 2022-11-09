@@ -1,5 +1,5 @@
 const { newStatsCreatorInDB, newPlayerCreatorInDB } = require('../utils/creators');
-const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters, setApiGroupFilters} = require('../utils/apiRequest');
+const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters, setApiGroupFilters, setApiTournamentsFilters} = require('../utils/apiRequest');
 
 const playerStatsController = async (req) => {
     let body = req.body;
@@ -35,7 +35,6 @@ const userMetaData = async(req) => {
 
 const playerFiltersFromApi = async(req) => {
     const body = req.body;
-   console.log("body antes de reques",body)
     try {
         const setFilters = await setApiPlayerFilters( body );
         return setFilters
@@ -54,10 +53,21 @@ const groupDefaultFiltersFromApi = async(req) => {
     }
 }
 
+const tournamentsFiltersFromApi = async(req) => {
+    const body = req.body; 
+    try {
+        const setFilters = await setApiTournamentsFilters( body );
+        return setFilters
+    } catch (error) {
+        return error
+    }
+}
+
 
 module.exports = {
     playerStatsController,
     userMetaData,
     playerFiltersFromApi,
-    groupDefaultFiltersFromApi
+    groupDefaultFiltersFromApi,
+    tournamentsFiltersFromApi,
 }

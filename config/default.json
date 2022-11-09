@@ -3,8 +3,9 @@
       "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
       "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/room/players",
       "group_info" :"https://www.sharkscope.com/api/bbzgsa/networks/Player%20Group/players/:group/statistics",
+      "tournaments_info" : "https://www.sharkscope.com/api/bbzgsa/networks/888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr/activeTournaments",
       "services":{   
-                 "filter":"?filter="
+                 "filter":"?Filter="
         }
       }
 }

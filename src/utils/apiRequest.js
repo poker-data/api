@@ -171,7 +171,6 @@ const setApiGroupFilters = (body) => {
             Username: process.env.USERNAMEAPI,
             Password: process.env.PASSWORDAPI,
         }
-        console.log(url, "url antes de pegarle a la apiii" );
         axios.get(url, {
             headers: credentials
         })
@@ -234,9 +233,55 @@ const setApiGroupFilters = (body) => {
 }
 
 
+
+const setApiTournamentsFilters = (body) => {
+    return new Promise((resolve, reject) => {
+
+        let url = config.get(`url_services.tournaments_info`)
+        console.log(url)
+        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Date!:1D'}`;
+        console.log(url);
+        axios.get(url, {
+            headers: {
+                Accept: 'application/json',
+                Username: process.env.USERNAMEAPI,
+                Password: process.env.PASSWORDAPI,
+            }
+        })
+        .then(response => {
+            
+            let finalStatsResponse = []
+            let tempStatsResponse = []
+            const checStatskError = response.data.Response.RegisteringTournamentsResponse ? response.data.Response.RegisteringTournamentsResponse : response.data.Response.ErrorResponse
+            if (!checStatskError.Error) {
+                tempStatsResponse = response.data.Response.RegisteringTournamentsResponse.RegisteringTournaments.RegisteringTournament
+                const statsResponse = {}
+                tempStatsResponse.map(element => {
+                    const elementId = element["@id"] 
+                    const value = element["$"]
+                    statsResponse[elementId] = value
+                    })
+               finalStatsResponse = statsResponse 
+            
+               finalResponse = {
+                stats : finalStatsResponse
+               }
+                }
+             else {
+                 finalResponse = checkError
+             }
+           resolve(finalResponse);
+         })
+         .catch(error => {
+             reject(error);
+         });
+ });
+}
+
 module.exports = {
     apiPlayerStatistics,
     apiUserMetaData,
     setApiPlayerFilters,
-    setApiGroupFilters
+    setApiGroupFilters,
+    setApiTournamentsFilters,
 }

@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   playerStatsController,
   playerFiltersFromApi,
-  groupDefaultFiltersFromApi
+  groupDefaultFiltersFromApi,
+  tournamentsFiltersFromApi,
 } = require("../controllers/playerStatsController");
 const { newPlayerController, findPlayersController } = require("../controllers/playerController");
 
@@ -339,6 +340,36 @@ router.post("/getDefaultGroupFiltersData", async (req, res) => {
     res.status(200).json({
       ok: true,
       info: groupData
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+});
+
+router.post("/getTournamentsData", async (req, res) => {
+
+  try {
+
+    let services = [ tournamentsFiltersFromApi(req)]
+
+    let [tournamentData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: tournamentData
     }
     )
 
