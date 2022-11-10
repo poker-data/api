@@ -22,7 +22,7 @@ const apiPlayerStatistics = (body) => {
             // console.log(response.data.Response.PlayerResponse.PlayerView.Player.Statistics);
              let finalResponse = []
              const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-             if (!checkError.Error) {
+             if (!checkError) {
                  finalResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
                  const finalObjectResponse = {}
                  finalResponse.map(element => {
@@ -107,8 +107,8 @@ const setApiPlayerFilters = (body) => {
             let finalDataSetResponse = []
             let tempStatsResponse = []
             let tempDataSetResponse = []
-            const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-            if (!checStatskError.Error) {
+            const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+            if (!checkError.Error) {
                 tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.Player.Statistics.Statistic
                 const statsResponse = {}
                 tempStatsResponse.map(element => {
@@ -192,10 +192,10 @@ const setApiGroupFilters = (body) => {
                     let finalDataSetResponse = []
                     let tempStatsResponse = []
                     let tempDataSetResponse = []
-                    const checStatskError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-                    if (!checStatskError.Error) {
+                    const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
+                    if (!checkError) {
                        tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
-                        const statsResponse = {}
+                        let statsResponse = {}
                         tempStatsResponse.map(element => {
                             const elementId = element["@id"] 
                             const value = element["$"]
@@ -238,9 +238,8 @@ const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
 
         let url = config.get(`url_services.tournaments_info`)
-        console.log(url)
         url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Date!:1D'}`;
-        console.log(url);
+        //console.log(url);
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -250,19 +249,68 @@ const setApiTournamentsFilters = (body) => {
         })
         .then(response => {
             
+            const tableColumns = [
+                "@id",
+                "@scheduledStartDate",
+                "@network",
+                "@stake",
+                "@guarantee",
+                "@game",
+                "@name",
+                "@AvAbility",
+                "@TypeAvAbility",
+                "@TypeAvEntrants",
+                "@TypeAvDuration",
+                "@overlay",
+            ];
             let finalStatsResponse = []
             let tempStatsResponse = []
-            const checStatskError = response.data.Response.RegisteringTournamentsResponse ? response.data.Response.RegisteringTournamentsResponse : response.data.Response.ErrorResponse
-            if (!checStatskError.Error) {
+            const checkError = response.data.Response.RegisteringTournamentsResponse ? response.data.Response.RegisteringTournamentsResponse : response.data.Response.ErrorResponse
+            if (!checkError.Error) {
                 tempStatsResponse = response.data.Response.RegisteringTournamentsResponse.RegisteringTournaments.RegisteringTournament
-                const statsResponse = {}
+                let statsResponse = {}
+                
                 tempStatsResponse.map(element => {
-                    const elementId = element["@id"] 
-                    const value = element["$"]
-                    statsResponse[elementId] = value
+                    console.log("Principio")
+                    //asignamos valor a cada columnna si existe
+                    tableColumns.forEach(column => {
+                        const value = element[column] ? element[column] : null
+                        
+                        if(value!==null){
+                        //sacamos @ del nombre de la columna y asignamos valor
+                        statsResponse[column.substring(1,column.length)] = value
+                        }else
+                        {
+                            //si el valor es null lo declaramos como vacio
+                            statsResponse[column.substring(1,column.length)] = "Empty"
+                        }
                     })
-               finalStatsResponse = statsResponse 
-            
+                    
+
+                    const checkStats = element.Statistics ? element.Statistics : false
+                    if(checkStats){
+                    const checkStat = element.Statistics.Statistic ? element.Statistics.Statistic : false
+                    console.log(element.Statistics.Statistic)
+                    if (checkStat) {
+                        element.Statistics.Statistic.forEach(stats => {
+                        const statId = stats["@id"]
+                        const value = stats["$"]
+                        const key = "@"+statId
+                        if(tableColumns.includes(key)){
+                        statsResponse[statId] = value
+                        }
+                    })
+                }
+            }
+
+
+                    console.log(statsResponse)
+                    finalStatsResponse.push(statsResponse)
+                    //console.log(finalStatsResponse)
+                    console.log("Final")
+        })
+              console.log(finalStatsResponse)
+              // finalStatsResponse = statsResponse 
                finalResponse = {
                 stats : finalStatsResponse
                }
