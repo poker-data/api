@@ -287,7 +287,6 @@ const setApiTournamentsFilters = (body) => {
                     const checkStatistics = element.Statistics ? true : false
                     if(checkStatistics){
                     const checkStat = element.Statistics.Statistic ? true: false
-                    console.log(checkStat)
                     if (checkStat) {
                         //Si es undefined no entra la foreach por ende lo convertimos en uno
                         if(element.Statistics.Statistic.length === undefined){
@@ -304,8 +303,9 @@ const setApiTournamentsFilters = (body) => {
                 }
             }
                     finalStatsResponse.push(statsResponse)
+                    statsResponse = {}
         })
-              console.log(finalStatsResponse)
+              //console.log(finalStatsResponse)
               // finalStatsResponse = statsResponse 
                finalResponse = {
                 stats : finalStatsResponse
