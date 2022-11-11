@@ -269,13 +269,10 @@ const setApiTournamentsFilters = (body) => {
             if (!checkError.Error) {
                 tempStatsResponse = response.data.Response.RegisteringTournamentsResponse.RegisteringTournaments.RegisteringTournament
                 let statsResponse = {}
-                
                 tempStatsResponse.map(element => {
-                    console.log("Principio")
                     //asignamos valor a cada columnna si existe
                     tableColumns.forEach(column => {
                         const value = element[column] ? element[column] : null
-                        
                         if(value!==null){
                         //sacamos @ del nombre de la columna y asignamos valor
                         statsResponse[column.substring(1,column.length)] = value
@@ -287,27 +284,26 @@ const setApiTournamentsFilters = (body) => {
                     })
                     
 
-                    const checkStats = element.Statistics ? element.Statistics : false
-                    if(checkStats){
-                    const checkStat = element.Statistics.Statistic ? element.Statistics.Statistic : false
-                    console.log(element.Statistics.Statistic)
+                    const checkStatistics = element.Statistics ? true : false
+                    if(checkStatistics){
+                    const checkStat = element.Statistics.Statistic ? true: false
+                    console.log(checkStat)
                     if (checkStat) {
-                        element.Statistics.Statistic.forEach(stats => {
+                        //Si es undefined no entra la foreach por ende lo convertimos en uno
+                        if(element.Statistics.Statistic.length === undefined){
+                            element.Statistics.Statistic = [element.Statistics.Statistic]
+                        }
+                        element.Statistics.Statistic.forEach((stats) => {
                         const statId = stats["@id"]
                         const value = stats["$"]
-                        const key = "@"+statId
+                        const key = `@${statId}`
                         if(tableColumns.includes(key)){
                         statsResponse[statId] = value
                         }
                     })
                 }
             }
-
-
-                    console.log(statsResponse)
                     finalStatsResponse.push(statsResponse)
-                    //console.log(finalStatsResponse)
-                    console.log("Final")
         })
               console.log(finalStatsResponse)
               // finalStatsResponse = statsResponse 
