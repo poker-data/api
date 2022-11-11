@@ -238,7 +238,8 @@ const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
 
         let url = config.get(`url_services.tournaments_info`)
-        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Date!:1D'}`;
+        //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Type!:C,DN,HIT,SAT,TI,TN;TournamentName!:Sat;Date!:1D;Class:SCHEDULED'}`;
+        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1H;Class:SCHEDULED'}`;
         //console.log(url);
         axios.get(url, {
             headers: {
@@ -255,6 +256,7 @@ const setApiTournamentsFilters = (body) => {
                 "@network",
                 "@stake",
                 "@guarantee",
+                "@field",
                 "@game",
                 "@name",
                 "@AvAbility",
@@ -279,7 +281,7 @@ const setApiTournamentsFilters = (body) => {
                         }else
                         {
                             //si el valor es null lo declaramos como vacio
-                            statsResponse[column.substring(1,column.length)] = "Empty"
+                            statsResponse[column.substring(1,column.length)] = "-"
                         }
                     })
                     
@@ -305,10 +307,41 @@ const setApiTournamentsFilters = (body) => {
                     finalStatsResponse.push(statsResponse)
                     statsResponse = {}
         })
-              //console.log(finalStatsResponse)
-              // finalStatsResponse = statsResponse 
+
+            //Excluimos los torneos que contengan esas palabras claves
+            let filteredData = finalStatsResponse.filter((value,index) => {
+                let validation = true;
+                if(value.name.toLowerCase().includes("seat") || value.name.toLowerCase().includes("sat") ||
+                value.name.toLowerCase().includes("qualifier") || value.name.toLowerCase().includes("satellite")
+                || value.name.toLowerCase().includes("sat:") || value.name.toLowerCase().includes("seats")
+                || value.name.toLowerCase().includes("ticket") || value.name.toLowerCase().includes("feeder")
+                || value.name.toLowerCase().includes("step") || value.name.includes("THESH1TSHOW")
+                || value.name.includes("$1.50 Hyper Turbo") || value.name.includes("Double")
+                || value.name.includes("T$ Builder") || value.name.includes("Flip & Go") 
+                || value.name.includes("$5 Regular") || value.name.includes("$5 Turbo") 
+                || value.name.includes("$3 Regular") || value.name.includes("$3 Turbo") 
+                || value.name.includes("$1.50 Regular") || value.name.includes("$1.50 Turbo") )
+                    {
+                    validation = false
+                    }else{
+                        validation = true
+                    }
+                    return validation;
+                })
+
+             filteredData.map((element) => {
+                //cuando la garantia esta vacia la buscamos en el nombre
+                if(element.guarantee === "-"){
+                    var priceRegex = /[(0-9)+,?(0-9)*]+/igm;
+                    element.guarantee = parseFloat(priceRegex.exec(element.name.replace(",","").replace(".",""))).toString();
+                    }
+                //Calculamos el field mediante la division del garantizado por la entrada
+                element.field = (parseFloat(element.guarantee)/parseFloat(element.stake)).toFixed(2)
+                
+             })
+
                finalResponse = {
-                stats : finalStatsResponse
+                stats : filteredData
                }
                 }
              else {
