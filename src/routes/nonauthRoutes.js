@@ -37,6 +37,7 @@ router.get("/health-check", (req, res) => {
 router.post("/register",async (req, res) => {
   try {
     const newUser = await newUserController(req);
+    console.log(newUser);
     res.status(200).json({
       ok: true,
       info: newUser,

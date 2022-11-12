@@ -23,7 +23,7 @@ router.get("/health-check" ,(req, res) => {
 
 
 //api/playerStatistics GET
-router.post("/playerData", async (req, res) => {
+router.post("/playerData" ,async (req, res) => {
 
   try {
 
