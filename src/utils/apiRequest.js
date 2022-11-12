@@ -308,16 +308,16 @@ const setApiTournamentsFilters = (body) => {
                     statsResponse = {}
         })
 
-            //Excluimos los torneos que contengan esas palabras claves
+            //Excluimos los torneos que contengan palabras claves
             let filteredData = finalStatsResponse.filter((value,index) => {
                 if(config.get("excluded_keywords_lowercase").some(el => value.name.toLowerCase().includes(el))){
                     return false;
-                }else
+                }
+                else
                 {
                     if(config.get("excluded_keywords_literal").some(el => value.name.includes(el))) return false;
                     else return true;
                 }
-                
                 })
 
              filteredData.map((element) => {
