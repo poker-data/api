@@ -6,6 +6,10 @@
       "tournaments_info" : "https://www.sharkscope.com/api/bbzgsa/networks/888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr/activeTournaments",
       "services":{   
                  "filter":"?Filter="
-        }
-      }
+        }      
+      },
+      "excluded_keywords_lowercase" : ["seat","sat","sat:","seats","satellite","qualifier","ticket","feeder","step",
+                              "double"],
+      "excluded_keywords_literal" : ["THESH1TSHOW","$1.50 Hyper Turbo","Double","T$ Builder","Flip & Go","$5 Regular",
+                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo"]
 }

@@ -310,23 +310,14 @@ const setApiTournamentsFilters = (body) => {
 
             //Excluimos los torneos que contengan esas palabras claves
             let filteredData = finalStatsResponse.filter((value,index) => {
-                let validation = true;
-                if(value.name.toLowerCase().includes("seat") || value.name.toLowerCase().includes("sat") ||
-                value.name.toLowerCase().includes("qualifier") || value.name.toLowerCase().includes("satellite")
-                || value.name.toLowerCase().includes("sat:") || value.name.toLowerCase().includes("seats")
-                || value.name.toLowerCase().includes("ticket") || value.name.toLowerCase().includes("feeder")
-                || value.name.toLowerCase().includes("step") || value.name.includes("THESH1TSHOW")
-                || value.name.includes("$1.50 Hyper Turbo") || value.name.includes("Double")
-                || value.name.includes("T$ Builder") || value.name.includes("Flip & Go") 
-                || value.name.includes("$5 Regular") || value.name.includes("$5 Turbo") 
-                || value.name.includes("$3 Regular") || value.name.includes("$3 Turbo") 
-                || value.name.includes("$1.50 Regular") || value.name.includes("$1.50 Turbo") )
-                    {
-                    validation = false
-                    }else{
-                        validation = true
-                    }
-                    return validation;
+                if(config.get("excluded_keywords_lowercase").some(el => value.name.toLowerCase().includes(el))){
+                    return false;
+                }else
+                {
+                    if(config.get("excluded_keywords_literal").some(el => value.name.includes(el))) return false;
+                    else return true;
+                }
+                
                 })
 
              filteredData.map((element) => {
