@@ -193,7 +193,7 @@ const setApiGroupFilters = (body) => {
                     let tempStatsResponse = []
                     let tempDataSetResponse = []
                     const checkError = response.data.Response.PlayerResponse ? response.data.Response.PlayerResponse : response.data.Response.ErrorResponse
-                    if (!checkError) {
+                    if (!checkError.Error) {
                        tempStatsResponse = response.data.Response.PlayerResponse.PlayerView.PlayerGroup.Statistics.Statistic
                         let statsResponse = {}
                         tempStatsResponse.map(element => {
