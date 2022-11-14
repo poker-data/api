@@ -155,11 +155,11 @@ const setApiGroupFilters = (body) => {
         
         if (filterType !== null) {
            
-            filterType.includes('filterType1') ? url = `${url}Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType.includes('filterType2') ? url = `${url}Entrants:500~*;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType.includes('filterType3') ? url = `${url}Entrants:250~500;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType.includes('filterType4') ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType.includes('filterType5') ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
+            filterType ==='filterType1' ? url = `${url}Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType ==='filterType2' ? url = `${url}Entrants:500~*;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType === 'filterType3' ? url = `${url}Entrants:250~500;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType ==='filterType4' ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType === 'filterType5' ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
         }
 
         const credentials = {
