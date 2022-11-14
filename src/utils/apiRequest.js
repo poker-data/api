@@ -148,22 +148,18 @@ const setApiGroupFilters = (body) => {
    
     return new Promise((resolve, reject) => {
         const shkName = body.shkName || null;
-        const filterType1 = body.filterType1 || null;
-        const filterType2 = body.filterType2 || null;
-        const filterType3 = body.filterType3 || null;
-        const filterType4 = body.filterType4 || null;
-        const filterType5 = body.filterType5 || null;
+        const filterType = body.filterType || null;
 
         let url = config.get(`url_services.group_info`).replace(':group', shkName);
         url = `${url}${config.get(`url_services.services.filter`)}`;
         
-        if (filterType1 !== null || filterType2 !== null || filterType3 !== null || filterType4 !== null || filterType5 !== null) {
+        if (filterType !== null) {
            
-            filterType1 ? url = `${url}Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType2 ? url = `${url}Entrants:500~*;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType3 ? url = `${url}Entrants:250~500;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType4 ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
-            filterType5 ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
+            filterType.includes('filterType1') ? url = `${url}Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType.includes('filterType2') ? url = `${url}Entrants:500~*;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType.includes('filterType3') ? url = `${url}Entrants:250~500;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType.includes('filterType4') ? url = `${url}Entrants:2~250;Type!:SAT,TI;Class:SCHEDULED` : url = `${url}`;
+            filterType.includes('filterType5') ? url = `${url}Type!:SAT,TI;Class:SNG` : url = `${url}`;
         }
 
         const credentials = {
