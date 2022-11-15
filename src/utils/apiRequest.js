@@ -235,7 +235,7 @@ const setApiTournamentsFilters = (body) => {
 
         let url = config.get(`url_services.tournaments_info`)
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Type!:C,DN,HIT,SAT,TI,TN;TournamentName!:Sat;Date!:1D;Class:SCHEDULED'}`;
-        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1H;Class:SCHEDULED'}`;
+        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD0.8~6;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1H;Class:SCHEDULED'}`;
         //console.log(url);
         axios.get(url, {
             headers: {
