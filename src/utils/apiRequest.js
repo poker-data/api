@@ -232,10 +232,19 @@ const setApiGroupFilters = (body) => {
 
 const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
-
+        const playerLevel = body.playerLevel;
         let url = config.get(`url_services.tournaments_info`)
+        let stakeRange;
+        config.get('playerLevels').map(element => {
+        if(element.level === playerLevel) {
+            stakeRange = element.stakeRange
+        }
+        })
+        
+        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD'}${stakeRange}${';Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
+        
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Type!:C,DN,HIT,SAT,TI,TN;TournamentName!:Sat;Date!:1D;Class:SCHEDULED'}`;
-        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD0.8~6;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
+        //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD0.8~6;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
         //console.log(url);
         axios.get(url, {
             headers: {
@@ -306,13 +315,20 @@ const setApiTournamentsFilters = (body) => {
 
             //Excluimos los torneos que contengan palabras claves
             let filteredData = finalStatsResponse.filter((value,index) => {
-                if(config.get("excluded_keywords_lowercase").some(el => value.name.toLowerCase().includes(el))){
+                if(config.get("excluded_keywords_lowercase").some(el => value.name.toLowerCase().includes(el)))
+                {
                     return false;
                 }
                 else
                 {
-                    if(config.get("excluded_keywords_literal").some(el => value.name.includes(el))) return false;
-                    else return true;
+                    if(config.get("excluded_keywords_literal").some(el => value.name.includes(el))) 
+                    {
+                        return false;
+                    }
+                    else 
+                    {
+                        return true;
+                    }
                 }
                 })
 

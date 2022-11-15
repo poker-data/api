@@ -11,5 +11,39 @@
       "excluded_keywords_lowercase" : ["seat","sat","sat:","seats","satellite","qualifier","ticket","feeder","step",
                               "double"],
       "excluded_keywords_literal" : ["THESH1TSHOW","$1.50 Hyper Turbo","Double","T$ Builder","Flip & Go","$5 Regular",
-                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo"]
+                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo"],
+      "playerLevels" : [
+        {
+          "level" : "1",
+          "stakeRange" : "1~5.50"
+        },
+        {
+          "level" : "2",
+          "stakeRange" : "3.30~11"
+        },
+        {
+          "level" : "3",
+          "stakeRange" : "5.50~16.50"
+        },
+        {
+          "level" : "4",
+          "stakeRange" : "7.50~25"
+        },
+        {
+          "level" : "5",
+          "stakeRange" : "10~35"
+        },
+        {
+          "level" : "6",
+          "stakeRange" : "16.50~75"
+        },
+        {
+          "level" : "7",
+          "stakeRange" : "22~75"
+        },
+        {
+          "level" : "8",
+          "stakeRange" : "30~129"
+        }
+      ]
 }
