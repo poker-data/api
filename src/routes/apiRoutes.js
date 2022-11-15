@@ -12,6 +12,8 @@ const {findRoomStatsController, setRoomStatsController} = require("../controller
 
 const { getGroupController, setGroupController } = require("../controllers/groupController");
 
+const {remainingRequestsController} = require("../controllers/infoController");
+
 const { verifyToken } = require("../middlewares/authMiddleware");
 
 require('dotenv').config()
@@ -22,7 +24,39 @@ router.get("/health-check" ,(req, res) => {
 });
 
 
-//api/playerStatistics GET
+router.post("/remainingRequest" ,async (req, res) => {
+
+  try {
+
+    let services = [remainingRequestsController(req)]
+
+    let [remainingRequest] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: remainingRequest
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+
+
 router.post("/playerData" ,async (req, res) => {
 
   try {
@@ -69,7 +103,6 @@ router.post("/playerDataFiltered/:playerName", async (req, res) => {
         }
       })
     ))
-    console.log("datos filtro jugador ",playerSetFilters)
     res.status(200).json({
       ok: true,
       info: playerSetFilters

@@ -1,6 +1,41 @@
 const config = require('config');
 const axios = require('axios');
 
+
+const remainingRequests = () => {
+    return new Promise((resolve, reject) => {
+
+        let url = config.get(`url_services.player_metadata`);
+
+        axios.get(url, {
+            headers: {
+                Accept: 'application/json',
+                Username: process.env.USERNAMEAPI,
+                Password: process.env.PASSWORDAPI,
+            }
+        })
+            .then(response => {
+                let finalStatsResponse = []
+                const checkError = response.data.Response.UserInfo ? response.data.Response.UserInfo.RemainingSearches : response.data.Response.ErrorResponse
+                if (!checkError.Error) {
+                   
+                    finalStatsResponse = checkError
+    
+                   finalResponse = {
+                    remainingRequests: finalStatsResponse
+                   }
+                    }
+            else {
+                finalResponse = checkError
+            }
+            resolve(finalResponse);
+        })
+        .catch(error => {
+            reject(error);
+        });
+});
+}
+
 const apiPlayerStatistics = (body) => {
     const shkUsername = body.shkUsername;
     const dateFrom = body.dateFrom || null;
@@ -233,8 +268,10 @@ const setApiGroupFilters = (body) => {
 const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
         const playerLevel = body.playerLevel;
+
         let url = config.get(`url_services.tournaments_info`)
         let stakeRange;
+        //recorremos los niveles de jugador para obtener el rango de buy in
         config.get('playerLevels').map(element => {
         if(element.level === playerLevel) {
             stakeRange = element.stakeRange
@@ -364,4 +401,5 @@ module.exports = {
     setApiPlayerFilters,
     setApiGroupFilters,
     setApiTournamentsFilters,
+    remainingRequests,
 }
