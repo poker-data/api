@@ -4,8 +4,8 @@ const { remainingRequests } = require('../utils/apiRequest');
 const remainingRequestsController = async(req) => {
     const body = req.body; 
     try {
-        const setFilters = await remainingRequests( body );
-        return setFilters
+        const setRemainingRequests = await remainingRequests( body );
+        return setRemainingRequests
     } catch (error) {
         return error
     }

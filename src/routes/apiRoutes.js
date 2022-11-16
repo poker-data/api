@@ -16,6 +16,8 @@ const {remainingRequestsController} = require("../controllers/infoController");
 
 const { verifyToken } = require("../middlewares/authMiddleware");
 
+const {getUserController} = require("../controllers/userController");
+
 require('dotenv').config()
 
 
@@ -418,10 +420,35 @@ router.post("/getTournamentsData", async (req, res) => {
 
 // /api/users/:id GET
 /* This is a get request to the route /users/:id. It is receiving the data from the body of the request
-and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+and validating it with the userValidationSchema. If t he data is valid, it is saving the user to the
 database. */
-router.get("/users/:id", async (req, res) => {
+router.get("/users/:_id", async (req, res) => {
 
+  const { _id } = req.params;
+
+  try {
+    let services = [getUserController(_id)]
+
+    let [userData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: userData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
 });
 
 // /api/users/:id PUT
