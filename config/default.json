@@ -9,9 +9,9 @@
         }      
       },
       "excluded_keywords_lowercase" : ["seat","sat","sat:","seats","satellite","qualifier","ticket","feeder","step",
-                              "double"],
+                              "double", "trident"],
       "excluded_keywords_literal" : ["THESH1TSHOW","$1.50 Hyper Turbo","Double","T$ Builder","Flip & Go","$5 Regular",
-                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo"],
+                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo","Trident"],
       "playerLevels" : [
         {
           "level" : "1",
