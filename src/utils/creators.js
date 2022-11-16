@@ -24,7 +24,7 @@ const newUserCreatorInDB = async (req) => {
     email: req.body.email,
     password: newHashPassword,
     shkUsername: req.body.shkUsername,
-    playerLevel: req.body.playerLevel,
+    playerLevel: req.body.level,
     admin: req.body.admin || false,
     role: req.body.role,
   });

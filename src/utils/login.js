@@ -24,7 +24,10 @@ const loginUser = async (req) => {
     
     const token = jwt.sign(userToToken, secret)
 
-    const formatedUser = { _id: user._id, name: user.name, email: user.email, admin: user.admin }
+    const formatedUser = { 
+            _id: user._id, name: user.name, 
+            email: user.email, admin: user.admin, 
+            level: user.playerLevel, token: token }
 
     return ({ token: token , user: formatedUser })
 }
