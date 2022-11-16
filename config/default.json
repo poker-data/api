@@ -15,7 +15,7 @@
       "playerLevels" : [
         {
           "level" : "1",
-          "stakeRange" : "1~5.50"
+          "stakeRange" : "0.8~6"
         },
         {
           "level" : "2",
