@@ -317,8 +317,15 @@ const setApiTournamentsFilters = (body) => {
                     tableColumns.forEach(column => {
                         const value = element[column] ? element[column] : null
                         if(value!==null){
-                        //sacamos @ del nombre de la columna y asignamos valor
-                        statsResponse[column.substring(1,column.length)] = value
+                            //Sumamos el stake mas el rake
+                            if(column==='@stake'){
+                                let stakeplusrake;
+                                stakeplusrake=parseFloat(element['@stake']) + parseFloat(element['@rake'])
+                                statsResponse[column.substring(1,column.length)] = stakeplusrake.toString()
+                            }else{
+                                //sacamos @ del nombre de la columna y asignamos valor
+                                statsResponse[column.substring(1,column.length)] = value
+                            }
                         }else
                         {
                             //si el valor es null lo declaramos como vacio
