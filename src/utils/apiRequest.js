@@ -379,7 +379,7 @@ const setApiTournamentsFilters = (body) => {
              filteredData.map((element) => {
                 //cuando la garantia esta vacia la buscamos en el nombre
                 if(element.guarantee === "-"){
-                    var priceRegex = /[[:<:]]\d+((.|,)\d+)?/igm;
+                    var priceRegex = /(?:[€]|[$])\s*\d+(\s|.|,)?[0-9]*(.|,)?[0-9]{2}/igm;
                     //var priceRegex = /[(0-9)+,?(0-9)*]+/igm;
                     element.guarantee = parseFloat(priceRegex.exec(element.name.replace(",","").replace(".",""))).toString();
                     }
