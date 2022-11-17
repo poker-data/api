@@ -297,6 +297,7 @@ const setApiTournamentsFilters = (body) => {
                 "@network",
                 "@stake",
                 "@guarantee",
+                "@lateRegEndDate",
                 "@field",
                 "@game",
                 "@name",
