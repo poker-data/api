@@ -278,11 +278,10 @@ const setApiTournamentsFilters = (body) => {
         }
         })
         
-        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD'}${stakeRange}${';Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
-        
+        url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD'}${stakeRange}${';Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
+
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Type!:C,DN,HIT,SAT,TI,TN;TournamentName!:Sat;Date!:1D;Class:SCHEDULED'}`;
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD0.8~6;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
-        //console.log(url);
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
