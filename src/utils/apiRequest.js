@@ -379,7 +379,8 @@ const setApiTournamentsFilters = (body) => {
              filteredData.map((element) => {
                 //cuando la garantia esta vacia la buscamos en el nombre
                 if(element.guarantee === "-"){
-                    var priceRegex = /[(0-9)+,?(0-9)*]+/igm;
+                    var priceRegex = /[[:<:]]\d+((.|,)\d+)?/igm;
+                    //var priceRegex = /[(0-9)+,?(0-9)*]+/igm;
                     element.guarantee = parseFloat(priceRegex.exec(element.name.replace(",","").replace(".",""))).toString();
                     }
                 //Calculamos el field mediante la division del garantizado por la entrada
