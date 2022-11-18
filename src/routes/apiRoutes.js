@@ -26,7 +26,7 @@ router.get("/health-check" ,(req, res) => {
 });
 
 
-router.post("/remainingRequest" ,async (req, res) => {
+router.post("/remainingRequest", verifyToken ,async (req, res) => {
 
   try {
 
@@ -59,7 +59,7 @@ router.post("/remainingRequest" ,async (req, res) => {
 
 
 
-router.post("/playerData" ,async (req, res) => {
+router.post("/playerData", verifyToken ,async (req, res) => {
 
   try {
 
@@ -91,7 +91,7 @@ router.post("/playerData" ,async (req, res) => {
 })
 
 //api/playerStatistics with filter GET
-router.post("/playerDataFiltered/:playerName", async (req, res) => {
+router.post("/playerDataFiltered/:playerName", verifyToken, async (req, res) => {
 
   try {
 
@@ -125,7 +125,7 @@ router.post("/playerDataFiltered/:playerName", async (req, res) => {
 //api/register  POST
 /* This is a post request to the route /register saving the user to the
 database. */
-router.post("/setPlayerData", async (req, res) => {
+router.post("/setPlayerData", verifyToken, async (req, res) => {
   try {
 
     let services = [newPlayerController(req)]
@@ -154,7 +154,7 @@ router.post("/setPlayerData", async (req, res) => {
   }
 });
 
-router.get("/getPlayers" ,async (req, res) => {
+router.get("/getPlayers", verifyToken ,async (req, res) => {
   try {
     let services = [findPlayersController()]
 
@@ -182,7 +182,7 @@ router.get("/getPlayers" ,async (req, res) => {
 }
 )
 
-router.get("/getRoomStats", async (req, res) => {
+router.get("/getRoomStats", verifyToken, async (req, res) => {
   try {
 
     let services = [findRoomStatsController()]
@@ -211,7 +211,7 @@ router.get("/getRoomStats", async (req, res) => {
 }
 )
 
-router.post("/setRoomStats", async (req, res) => {
+router.post("/setRoomStats", verifyToken, async (req, res) => {
   try {
 
     let services = [setRoomStatsController(req)]
@@ -240,7 +240,7 @@ router.post("/setRoomStats", async (req, res) => {
   }
 });
 
-router.get("/getRooms", async (req, res) => {
+router.get("/getRooms", verifyToken, async (req, res) => {
   try {
 
     const rooms = [
@@ -268,7 +268,7 @@ router.get("/getRooms", async (req, res) => {
   }
 }
 )
-router.get("/getDefaultFilters", async (req, res) => {
+router.get("/getDefaultFilters", verifyToken, async (req, res) => {
   try {
     
     const defaultFilters = [
@@ -293,7 +293,7 @@ router.get("/getDefaultFilters", async (req, res) => {
 }
 )
 
-router.get("/getGroups", async (req, res) => {
+router.get("/getGroups", verifyToken, async (req, res) => {
   try {
     let services = [getGroupController()]
 
@@ -328,7 +328,7 @@ router.get("/getGroups", async (req, res) => {
 }
 )
 
-router.post("/setGroup", async (req, res) => {
+router.post("/setGroup", verifyToken, async (req, res) => {
   try {
 
     let services = [setGroupController(req)]
@@ -358,7 +358,7 @@ router.post("/setGroup", async (req, res) => {
 }
 )
 
-router.post("/getDefaultGroupFiltersData", async (req, res) => {
+router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
 
   try {
 
@@ -388,7 +388,7 @@ router.post("/getDefaultGroupFiltersData", async (req, res) => {
 
 });
 
-router.post("/getTournamentsData", async (req, res) => {
+router.post("/getTournamentsData", verifyToken, async (req, res) => {
 
   try {
 
@@ -422,7 +422,7 @@ router.post("/getTournamentsData", async (req, res) => {
 /* This is a get request to the route /users/:id. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If t he data is valid, it is saving the user to the
 database. */
-router.get("/users/:_id", async (req, res) => {
+router.get("/users/:_id", verifyToken, async (req, res) => {
 
   const { _id } = req.params;
 
@@ -455,7 +455,7 @@ router.get("/users/:_id", async (req, res) => {
 /* This is a put request to the route /users/:id. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
-router.put("/users/:_id", async (req, res) => {
+router.put("/users/:_id", verifyToken, async (req, res) => {
 
 });
 
@@ -467,7 +467,7 @@ router.delete("/users/:_id", async (req, res) => {
 
 
 
-router.get("/playerData/:playerName", async (req, res) => {
+router.get("/playerData/:playerName", verifyToken, async (req, res) => {
 
 
 });
@@ -562,7 +562,7 @@ router.get("/playerData/:playerName", async (req, res) => {
   );
 });
  */
-router.post("/player", async (req, res) => {
+router.post("/player", verifyToken, async (req, res) => {
   newPlayer(req, res);
 });
 
