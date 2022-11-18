@@ -25,7 +25,7 @@ const userSchema = new Schema({
     unique: true,
   },
   playerLevel: {
-    type: Number,
+    type: String,
    },
   delete: {
     type: Boolean,
