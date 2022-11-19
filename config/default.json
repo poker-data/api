@@ -3,8 +3,51 @@
       "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
       "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/room/players",
       "group_info" :"https://www.sharkscope.com/api/bbzgsa/networks/Player%20Group/players/:group/statistics",
+      "tournaments_info" : "https://www.sharkscope.com/api/bbzgsa/networks/888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr/activeTournaments",
       "services":{   
-                 "filter":"?filter="
+                 "filter":"?Filter="
+        }      
+      },
+      "excluded_keywords_lowercase" : ["seat","sat","sat:","seats","satellite","qualifier","ticket","feeder","step",
+                              "double", "trident"],
+      "excluded_keywords_literal" : ["THESH1TSHOW","$1.50 Hyper Turbo","Double","T$ Builder","Flip & Go","$5 Regular",
+                                      "$5 Turbo","$3 Regular","$3 Turbo","$1.50 Regular","$1.50 Turbo","Trident"],
+      "playerLevels" : [
+        {
+          "level" : "1",
+          "stakeRange" : "1~5.50"
+        },
+        {
+          "level" : "2",
+          "stakeRange" : "3~11"
+        },
+        {
+          "level" : "3",
+          "stakeRange" : "5~16.50"
+        },
+        {
+          "level" : "4",
+          "stakeRange" : "6~25"
+        },
+        {
+          "level" : "5",
+          "stakeRange" : "10~35"
+        },
+        {
+          "level" : "5.1",
+          "stakeRange" : "10~45"
+        },
+        {
+          "level" : "6",
+          "stakeRange" : "14~75"
+        },
+        {
+          "level" : "7",
+          "stakeRange" : "19.8~90"
+        },
+        {
+          "level" : "8",
+          "stakeRange" : "30~129"
         }
-      }
+      ]
 }

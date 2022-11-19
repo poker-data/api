@@ -6,9 +6,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    required: true,
+  admin: {
+    type: Boolean,
+    default: false,
   },
   email: {
     type: String,
@@ -19,6 +19,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+   shkUsername: {
+    type: String,
+    // required: true,
+    unique: true,
+  },
+  playerLevel: {
+    type: String,
+   },
   delete: {
     type: Boolean,
     default: false,

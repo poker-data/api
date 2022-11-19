@@ -8,23 +8,27 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const newUserCreatorInDB = async (req) => {
-
+  const originalPassword = req.body.password
   const isEmailExist = await User.findOne({ email: req.body.email });
+  try {
   if (isEmailExist) {
     return ({ error: 'Email ya registrado'})
-
   }
+
   // hash contraseña
   const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(req.body.password, salt);
+  const newHashPassword = await bcrypt.hash(originalPassword, salt);
 
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: password,
+    password: newHashPassword,
+    shkUsername: req.body.shkUsername,
+    playerLevel: req.body.level,
+    admin: req.body.admin || false,
     role: req.body.role,
   });
-  try {
+ 
     const savedUser = await user.save();
     return savedUser
   } catch (error) {

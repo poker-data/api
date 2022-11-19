@@ -1,4 +1,4 @@
-const { newUserCreatorInDB } = require('../utils/index');
+const { newUserCreatorInDB, findUserInDbById } = require('../utils/index');
 const { loginUser } = require('../utils/index');
  
 
@@ -21,10 +21,19 @@ const loginUserController = async (req) => {
   }
 }
 
+const getUserController = async (req) => {
+  try{
+    const userList = await findUserInDbById(req);
+    return userList;
+  }catch (error) {
+    return error
+  }
+}
 
 
 
 module.exports = {
     newUserController,
-    loginUserController
+    loginUserController,
+    getUserController,
 }

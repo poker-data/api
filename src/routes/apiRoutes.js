@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   playerStatsController,
   playerFiltersFromApi,
-  groupDefaultFiltersFromApi
+  groupDefaultFiltersFromApi,
+  tournamentsFiltersFromApi,
 } = require("../controllers/playerStatsController");
 const { newPlayerController, findPlayersController } = require("../controllers/playerController");
 
@@ -11,18 +12,54 @@ const {findRoomStatsController, setRoomStatsController} = require("../controller
 
 const { getGroupController, setGroupController } = require("../controllers/groupController");
 
+const {remainingRequestsController} = require("../controllers/infoController");
+
 const { verifyToken } = require("../middlewares/authMiddleware");
+
+const {getUserController} = require("../controllers/userController");
 
 require('dotenv').config()
 
 
-router.get("/health-check" ,verifyToken ,(req, res) => {
+router.get("/health-check" ,(req, res) => {
   res.json({ status: "health-ok" });
 });
 
 
-//api/playerStatistics GET
-router.post("/playerData", verifyToken, async (req, res) => {
+router.post("/remainingRequest", verifyToken ,async (req, res) => {
+
+  try {
+
+    let services = [remainingRequestsController(req)]
+
+    let [remainingRequest] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: remainingRequest
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+
+
+router.post("/playerData", verifyToken ,async (req, res) => {
 
   try {
 
@@ -54,7 +91,7 @@ router.post("/playerData", verifyToken, async (req, res) => {
 })
 
 //api/playerStatistics with filter GET
-router.post("/playerDataFiltered/:playerName", async (req, res) => {
+router.post("/playerDataFiltered/:playerName", verifyToken, async (req, res) => {
 
   try {
 
@@ -88,7 +125,7 @@ router.post("/playerDataFiltered/:playerName", async (req, res) => {
 //api/register  POST
 /* This is a post request to the route /register saving the user to the
 database. */
-router.post("/setPlayerData", async (req, res) => {
+router.post("/setPlayerData", verifyToken, async (req, res) => {
   try {
 
     let services = [newPlayerController(req)]
@@ -123,7 +160,7 @@ router.get("/getPlayers", verifyToken ,async (req, res) => {
 
     let [playerData] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
+        console.log(err)
         return {
           ok: false,
           info: err
@@ -145,7 +182,7 @@ router.get("/getPlayers", verifyToken ,async (req, res) => {
 }
 )
 
-router.get("/getRoomStats", async (req, res) => {
+router.get("/getRoomStats", verifyToken, async (req, res) => {
   try {
 
     let services = [findRoomStatsController()]
@@ -174,7 +211,7 @@ router.get("/getRoomStats", async (req, res) => {
 }
 )
 
-router.post("/setRoomStats", async (req, res) => {
+router.post("/setRoomStats", verifyToken, async (req, res) => {
   try {
 
     let services = [setRoomStatsController(req)]
@@ -203,7 +240,7 @@ router.post("/setRoomStats", async (req, res) => {
   }
 });
 
-router.get("/getRooms", async (req, res) => {
+router.get("/getRooms", verifyToken, async (req, res) => {
   try {
 
     const rooms = [
@@ -231,7 +268,7 @@ router.get("/getRooms", async (req, res) => {
   }
 }
 )
-router.get("/getDefaultFilters", async (req, res) => {
+router.get("/getDefaultFilters", verifyToken, async (req, res) => {
   try {
     
     const defaultFilters = [
@@ -256,7 +293,7 @@ router.get("/getDefaultFilters", async (req, res) => {
 }
 )
 
-router.get("/getGroups", async (req, res) => {
+router.get("/getGroups", verifyToken, async (req, res) => {
   try {
     let services = [getGroupController()]
 
@@ -291,7 +328,7 @@ router.get("/getGroups", async (req, res) => {
 }
 )
 
-router.post("/setGroup", async (req, res) => {
+router.post("/setGroup", verifyToken, async (req, res) => {
   try {
 
     let services = [setGroupController(req)]
@@ -321,7 +358,7 @@ router.post("/setGroup", async (req, res) => {
 }
 )
 
-router.post("/getDefaultGroupFiltersData", async (req, res) => {
+router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
 
   try {
 
@@ -351,19 +388,74 @@ router.post("/getDefaultGroupFiltersData", async (req, res) => {
 
 });
 
+router.post("/getTournamentsData", verifyToken, async (req, res) => {
+
+  try {
+
+    let services = [ tournamentsFiltersFromApi(req)]
+
+    let [tournamentData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: tournamentData
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+});
+
 // /api/users/:id GET
 /* This is a get request to the route /users/:id. It is receiving the data from the body of the request
-and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+and validating it with the userValidationSchema. If t he data is valid, it is saving the user to the
 database. */
-router.get("/users/:id", async (req, res) => {
+router.get("/users/:_id", verifyToken, async (req, res) => {
 
+  const { _id } = req.params;
+
+  try {
+    let services = [getUserController(_id)]
+
+    let [userData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: userData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
 });
 
 // /api/users/:id PUT
 /* This is a put request to the route /users/:id. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
 database. */
-router.put("/users/:_id", async (req, res) => {
+router.put("/users/:_id", verifyToken, async (req, res) => {
 
 });
 
@@ -375,7 +467,7 @@ router.delete("/users/:_id", async (req, res) => {
 
 
 
-router.get("/playerData/:playerName", async (req, res) => {
+router.get("/playerData/:playerName", verifyToken, async (req, res) => {
 
 
 });
@@ -470,7 +562,7 @@ router.get("/playerData/:playerName", async (req, res) => {
   );
 });
  */
-router.post("/player", async (req, res) => {
+router.post("/player", verifyToken, async (req, res) => {
   newPlayer(req, res);
 });
 
