@@ -268,8 +268,18 @@ const setApiGroupFilters = (body) => {
 const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
         const playerLevel = body.playerLevel;
+        const playerCountry = body.playerCountry;
+  
+        let networks;
+        config.get('networkbyzone').map(element => {
+            if (element.zones.some(el => el === playerCountry)) {
+                networks = element.networks
+            }
+        })
 
-        let url = config.get(`url_services.tournaments_info`)
+        //seteamos las salas dependiendo region
+        let url = config.get(`url_services.tournaments_info`).replace('room', networks);
+
         let stakeRange;
         //recorremos los niveles de jugador para obtener el rango de buy in
         config.get('playerLevels').map(element => {
