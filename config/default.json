@@ -3,7 +3,7 @@
       "player_metadata": "https://www.sharkscope.com/api/bbzgsa/user/metadata", 
       "player_info": "https://www.sharkscope.com/api/bbzgsa/networks/room/players",
       "group_info" :"https://www.sharkscope.com/api/bbzgsa/networks/Player%20Group/players/:group/statistics",
-      "tournaments_info" : "https://www.sharkscope.com/api/bbzgsa/networks/888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr/activeTournaments",
+      "tournaments_info" : "https://www.sharkscope.com/api/bbzgsa/networks/room/activeTournaments",
       "services":{   
                  "filter":"?Filter="
         }      
@@ -49,5 +49,16 @@
           "level" : "8",
           "stakeRange" : "30~129"
         }
+      ],
+      "networkbyzone" : [
+        {
+          "zones" : ["Argentina","Colombia","Venezuela","Brasil"],
+          "networks" : "888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+        },
+        {
+          "zones" : ["España","Francia","Portugal"],
+          "networks" : "Chico%2CiPoker%2CWPN%2C888Poker(ES-PT)%2CiPoker(FR-ES)%2CPartyPoker(FR-ES)%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+        }
+
       ]
 }

@@ -27,7 +27,7 @@ const loginUser = async (req) => {
     const formatedUser = { 
             _id: user._id, name: user.name, 
             email: user.email, admin: user.admin, 
-            level: user.playerLevel, token: token }
+            level: user.playerLevel, country: user.country, token: token }
 
     return ({ token: token , user: formatedUser })
 }
