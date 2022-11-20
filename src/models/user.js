@@ -6,9 +6,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    required: true,
+  admin: {
+    type: Boolean,
+    default: false,
   },
   email: {
     type: String,
@@ -19,6 +19,19 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+   shkUsername: {
+    type: String,
+    // required: true,
+    unique: true,
+  },
+  playerLevel: {
+    type: String,
+    required: true,
+   },
+  country: {
+    type: String,
+    required: true
+  },
   delete: {
     type: Boolean,
     default: false,
@@ -26,4 +39,4 @@ const userSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);

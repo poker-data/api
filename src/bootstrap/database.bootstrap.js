@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-const dbConfig = require("../config/db.config");
 
 const HOSTS_RX =
   /(mongodb(?:\+srv|)):\/\/(?: (?:[^:]*) (?: : ([^@]*) )? @ )?([^/?]*)(?:\/|)(.*)/;
@@ -35,7 +34,7 @@ const dbMongoose = () => {
     const promiseInitialize = new Promise(async (resolve, reject) => {
       // mongoose.set('useFindAndModify', true);
       mongoose
-        .connect(connectionString, dbConfig)
+        .connect(connectionString)
         .then(() => {
           console.log("Connection Database successful");
           resolve("Connection Database successful");

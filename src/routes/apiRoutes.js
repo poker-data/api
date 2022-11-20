@@ -1,142 +1,480 @@
-/* const express = require("express");
-const User = require("../models/user");
-const Customer = require("../models/customer");
-const editUserValidationSchema = require("../validations/editUserSchema");
-const bcrypt = require("bcrypt");
-const Joi = require("joi");
+const express = require("express");
 const router = express.Router();
+const {
+  playerStatsController,
+  playerFiltersFromApi,
+  groupDefaultFiltersFromApi,
+  tournamentsFiltersFromApi,
+} = require("../controllers/playerStatsController");
+const { newPlayerController, findPlayersController } = require("../controllers/playerController");
 
-const cloudinary = require("cloudinary");
-const customer = require("../models/customer");
-cloudinary.config({
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+const {findRoomStatsController, setRoomStatsController} = require("../controllers/roomStatsController");
+
+const { getGroupController, setGroupController } = require("../controllers/groupController");
+
+const {remainingRequestsController} = require("../controllers/infoController");
+
+const { verifyToken } = require("../middlewares/authMiddleware");
+
+const {getUserController} = require("../controllers/userController");
+
+require('dotenv').config()
+
+
+router.get("/health-check" ,(req, res) => {
+  res.json({ status: "health-ok" });
 });
 
-router.get("/users", async (req, res) => {
+
+router.post("/remainingRequest", verifyToken ,async (req, res) => {
+
   try {
-    const users = await User.find({});
-    //console.log(users);
-    if (users.length > 0) {
-      const filteredUsers = users.filter((user) => user.delete === false);
-      res.json({ filteredUsers });
-    } else {
-      res.json("There are not users");
-    }
-  } catch (e) {
-    //console.log(e);
-    res.json(e);
-  }
-});
 
-router.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findById(id);
-    if (user) {
-      res.json(user);
-    } else {
-      res.json("No user found");
-    }
-  } catch (e) {
-    res.json(e);
-  }
-});
+    let services = [remainingRequestsController(req)]
 
-router.put("/users/:_id", async (req, res) => {
-  let data = req.body;
-  let _id = req.params._id;
-  console.log(data);
-  Joi.validate(data, editUserValidationSchema, (err, value) => {
-    if (err) {
-      console.log("there was an error with the validation");
-      console.log(err.details[0].message);
-      res.status(422).json({
-        status: "error",
-        message: "Invalid request data",
-        data: data,
-      });
-    } else {
-      const { password } = data;
-      let dataToWrite = {
-        name: data.name,
-        email: data.email,
-        role: data.role,
-      };
-      if (password) {
-        dataToWrite.password = bcrypt.hashSync(password, 10);
-      }
-      User.updateOne(
-        { _id: _id },
-        {
-          $set: {
-            ...dataToWrite,
-          },
-        },
-        function (error, info) {
-          if (error) {
-            res.json({
-              result: false,
-              msg: "Fail to modify user",
-              err,
-            });
-          } else {
-            res.json({
-              result: true,
-              info: info,
-            });
-          }
+    let [remainingRequest] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
         }
-      );
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: remainingRequest
     }
-  });
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+
+
+router.post("/playerData", verifyToken ,async (req, res) => {
+
+  try {
+
+    let services = [playerStatsController(req)]
+
+    let [newPlayerStats] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: newPlayerStats
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+//api/playerStatistics with filter GET
+router.post("/playerDataFiltered/:playerName", verifyToken, async (req, res) => {
+
+  try {
+
+    let services = [ playerFiltersFromApi(req)]
+
+    let [playerSetFilters] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: playerSetFilters
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+})
+
+
+//api/register  POST
+/* This is a post request to the route /register saving the user to the
+database. */
+router.post("/setPlayerData", verifyToken, async (req, res) => {
+  try {
+
+    let services = [newPlayerController(req)]
+
+    let [newPlayerResult] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newPlayerResult
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
+
+router.get("/getPlayers", verifyToken ,async (req, res) => {
+  try {
+    let services = [findPlayersController()]
+
+    let [playerData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({
+      ok: true,
+      info: playerData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.get("/getRoomStats", verifyToken, async (req, res) => {
+  try {
+
+    let services = [findRoomStatsController()]
+
+    let [roomData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({
+      ok: true,
+      info: roomData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/setRoomStats", verifyToken, async (req, res) => {
+  try {
+
+    let services = [setRoomStatsController(req)]
+
+    let [newRoomStats] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newRoomStats
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
+
+router.get("/getRooms", verifyToken, async (req, res) => {
+  try {
+
+    const rooms = [
+      {room : 'iPoker',},
+      {room : 'GGNetwork',},
+      {room : 'PokerStars',},
+      {room : '888Poker',},
+      {room : 'Chico',},
+      {room : 'WPN',},
+      {room : 'PartyPoker',},
+      {room : 'PokerStars(FR-ES-PT)',},
+      {room : 'Winamax.fr'}
+    ];
+
+    res.status(200).json({
+      ok: true,
+      info: rooms
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+router.get("/getDefaultFilters", verifyToken, async (req, res) => {
+  try {
+    
+    const defaultFilters = [
+      {id:1,filterType : 'filterType1', filterName: 'MTT - Total'},
+      {id:2,filterType : 'filterType2', filterName: 'MTT - High'},
+      {id:3,filterType : 'filterType3', filterName: 'MTT - Medium'},
+      {id:4,filterType : 'filterType4', filterName: 'MTT - Low'},
+      {id:5,filterType : 'filterType5', filterName: 'SNG'}  
+    ];
+
+    res.status(200).json({
+      ok: true,
+      info: defaultFilters
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.get("/getGroups", verifyToken, async (req, res) => {
+  try {
+    let services = [getGroupController()]
+
+    let [groups] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+   if(groups?.length > 0 ){
+    res.status(200).json({
+      ok: true,
+      info: groups
+    })
+   }else{
+    res.status(400).json({
+      ok: false,
+      info: groups
+    })
+   }
+  
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/setGroup", verifyToken, async (req, res) => {
+  try {
+
+    let services = [setGroupController(req)]
+
+    let [newGroup] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newGroup
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
+router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
+
+  try {
+
+    let services = [ groupDefaultFiltersFromApi(req)]
+
+    let [groupData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: groupData
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+});
+
+router.post("/getTournamentsData", verifyToken, async (req, res) => {
+
+  try {
+
+    let services = [ tournamentsFiltersFromApi(req)]
+
+    let [tournamentData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: tournamentData
+    }
+    )
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+
+});
+
+// /api/users/:id GET
+/* This is a get request to the route /users/:id. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If t he data is valid, it is saving the user to the
+database. */
+router.get("/users/:_id", verifyToken, async (req, res) => {
+
+  const { _id } = req.params;
+
+  try {
+    let services = [getUserController(_id)]
+
+    let [userData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: userData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
+
+// /api/users/:id PUT
+/* This is a put request to the route /users/:id. It is receiving the data from the body of the request
+and validating it with the userValidationSchema. If the data is valid, it is saving the user to the
+database. */
+router.put("/users/:_id", verifyToken, async (req, res) => {
+
 });
 
 
 router.delete("/users/:_id", async (req, res) => {
-  let _id = req.params._id;
-  console.log(req.params);
-  User.updateOne(
-    { _id: _id },
-    {
-      $set: {
-        delete: true,
-      },
-    },
-    function (error, info) {
-      if (error) {
-        res.json({
-          result: false,
-          msg: "Fail to delete user",
-          err,
-        });
-      } else {
-        res.json({
-          result: true,
-          info: info,
-        });
-      }
-    }
-  );
-}); */
 
-/* router.get("/customers", async (req, res) => {
-  try {
-    const customersList = await Customer.find({});
-    if (customersList.length > 0) {
-      const customers = customersList.filter(
-        (customer) => customer.delete === false
-      );
+});
 
-      res.json({ customers });
-    } else {
-      res.json("There are no customers");
-    }
-  } catch (err) {
-    res.status(400).json(err);
-  }
-}); */
+
+
+
+router.get("/playerData/:playerName", verifyToken, async (req, res) => {
+
+
+});
+
+
+
+/**  */
 
 /* router.delete("/customer/:_id", function (req, res) {
   let _id = req.params._id;
@@ -224,81 +562,8 @@ router.delete("/users/:_id", async (req, res) => {
   );
 });
  */
-/* router.post("/customer", async (req, res) => {
-  let {
-    name,
-    lastName,
-    email,
-    phone,
-    mainAddress,
-    city,
-  } = req.body;
-
-  try {
-    Customer.find({ email: email }, function (err, customerDB) {
-      if (err) {
-        return res.json({
-          success: false,
-          msj: "Inexistent customer",
-          err,
-        });
-      }
-      if (customerDB.length > 0) {
-        Customer.updateOne(
-          { email: email },
-          {
-            $set: {
-              name,
-              lastName,
-              email,
-              phone,
-              mainAddress,
-              city,
-              delete: false,
-            },
-          },
-          function (error, info) {
-            if (error) {
-              res.json({
-                ok: false,
-                msg: "Fail to modify customer",
-                err,
-              });
-            } else {
-              res.json({
-                ok: true,
-                customer: info,
-              });
-            }
-          }
-        );
-      } else {
-        let customer = new Customer({
-          name,
-          lastName,
-          email,
-          phone,
-          mainAddress,
-          city,
-        });
-        console.log(customer);
-        customer.save((err, customerDB) => {
-          if (err) {
-            return res.status(400).json({
-              ok: false,
-              err,
-            });
-          }
-          res.json({
-            ok: true,
-            customer: customerDB,
-          });
-        });
-      }
-    });
-  } catch (err) {
-    res.status(400).json(err);
-  }
-}); */
+router.post("/player", verifyToken, async (req, res) => {
+  newPlayer(req, res);
+});
 
 module.exports = router;
