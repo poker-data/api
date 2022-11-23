@@ -332,7 +332,7 @@ const setApiTournamentsFilters = (body) => {
                             if(column==='@stake'){
                                 let stakeplusrake;
                                 stakeplusrake=parseFloat(element['@stake']) + parseFloat(element['@rake'])
-                                statsResponse[column.substring(1,column.length)] = stakeplusrake.toString()
+                                statsResponse[column.substring(1,column.length)] = stakeplusrake.toFixed(2).toString()
                             }else{
                                 //sacamos @ del nombre de la columna y asignamos valor
                                 statsResponse[column.substring(1,column.length)] = value
