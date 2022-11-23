@@ -1,7 +1,7 @@
 const Player = require("../models/player");
 const RoomStats = require("../models/roomStatistics");
 const Group = require("../models/group");
-const User = require("../models/user");
+const User = require('../models/user')
 
 const findPlayersInDB = async () => {
 
@@ -36,11 +36,30 @@ const findGroupsInDB = async () => {
     }
 }
 
+const findUserInDb = async (id) => {
+  
+  if(id){
+    try {
+      const userList = await User.find({_id : id})
+      return userList
+    } catch (error) {
+      return error
+    }
+  } else {
+    try {
+      const userList = await User.find()
+      return userList
+    } catch (error) {
+      return error
+    }
+  }
+
+}
+
 const findUserInDbById = async (id) => {
   try {
-    const userList = await User.find({_id: id});
-    return userList;
-    
+    const userList = await User.find({ _id : id})
+    return userList
   } catch (error) {
     return error
   }
@@ -50,5 +69,6 @@ module.exports = {
   findPlayersInDB,
   findRoomStatsInDB,
   findGroupsInDB,
-  findUserInDbById,
+  findUserInDb,
+  findUserInDbById
 }

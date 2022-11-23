@@ -32,5 +32,4 @@ const invoicePostBodyFormatter = (receivedBody) => {
     work,
   };
 };
-
 module.exports = { invoicePutBodyFormatter, invoicePostBodyFormatter };
