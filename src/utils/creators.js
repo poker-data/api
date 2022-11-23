@@ -12,7 +12,7 @@ const newUserCreatorInDB = async (req) => {
   const isEmailExist = await User.findOne({ email: req.body.email });
   try {
   if (isEmailExist) {
-    return ({ error: 'Email ya registrado'})
+    return ({ error: 'Email already registered.'})
   }
 
   // hash contraseña
