@@ -15,6 +15,8 @@ const { getGroupController, setGroupController } = require("../controllers/group
 const {remainingRequestsController} = require("../controllers/infoController");
 
 const { verifyToken } = require("../middlewares/authMiddleware");
+const { findUserInDb } = require("../utils/finders");
+const { updateUserInDb, deleteUserInDb, getUserController } = require("../controllers/userController");
 
 require('dotenv').config()
 
@@ -420,6 +422,8 @@ router.post("/getTournamentsData", verifyToken, async (req, res) => {
 /* This is a get request to the route /users/:id. It is receiving the data from the body of the request
 and validating it with the userValidationSchema. If t he data is valid, it is saving the user to the
 database. */
+
+
 router.post("/admindashboard/users", async (req, res) => {
 
   const { id } = req.body
@@ -448,10 +452,11 @@ router.post("/admindashboard/users", async (req, res) => {
       info: error
     })
   }
+})
+
 router.get("/users/:_id", verifyToken, async (req, res) => {
 
   const { _id } = req.params;
-
   try {
     let services = [getUserController(_id)]
 
@@ -480,7 +485,6 @@ router.get("/users/:_id", verifyToken, async (req, res) => {
 router.put("/users/:_id", verifyToken, async (req, res) => {
 
   const { _id } = req.params;
-
   try {
     let services = [deleteUserInDb(_id)]
 
@@ -509,7 +513,6 @@ router.put("/users/:_id", verifyToken, async (req, res) => {
 router.post("/useredit/:_id", async (req, res) => {
   const { _id } = req.params;
   const { email, shkUsername, playerLevel, admin } = req.body
-  console.log(req.body)
   try {
     let services = [updateUserInDb(_id, email, shkUsername, playerLevel, admin )]
     let [userData] = await Promise.all(services.map(service =>
