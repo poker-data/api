@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken');
 
 const newUserCreatorInDB = async (req) => {
   const originalPassword = req.body.password
-  console.log(req.body, 'este es el reqbody')
   const isEmailExist = await User.findOne({ email: req.body.email });
   try {
   if (isEmailExist) {
