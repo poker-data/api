@@ -1,5 +1,6 @@
-const { newUserCreatorInDB, findUserInDbById } = require('../utils/index');
+const { newUserCreatorInDB, findUserInDbById, deleteUser } = require('../utils/index');
 const { loginUser } = require('../utils/index');
+const { updateUser } = require('../utils/updaters');
  
 
 const newUserController = async (req) => {
@@ -22,13 +23,33 @@ const loginUserController = async (req) => {
 }
 
 const getUserController = async (req) => {
-  try{
+  try {
     const userList = await findUserInDbById(req);
-    return userList;
-  }catch (error) {
+    return userList
+  } catch(error){
     return error
   }
 }
+
+const deleteUserInDb = async (req) => {
+  try {
+    const userDelete = await deleteUser(req)
+    return userDelete
+  } catch (error) {
+    return error
+  }
+}
+
+const updateUserInDb = async (_id,email, shkUsername, playerLevel, admin, country ) => {
+  try {
+    const userUpdated = updateUser(_id, email, shkUsername, playerLevel, admin, country )   
+    return userUpdated
+  } catch (error) {
+    return error
+  }
+
+}
+
 
 
 
@@ -36,4 +57,6 @@ module.exports = {
     newUserController,
     loginUserController,
     getUserController,
+    deleteUserInDb,
+    updateUserInDb
 }

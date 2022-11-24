@@ -12,7 +12,7 @@ const newUserCreatorInDB = async (req) => {
   const isEmailExist = await User.findOne({ email: req.body.email });
   try {
   if (isEmailExist) {
-    return ({ error: 'Email ya registrado'})
+    return ({ error: 'Email already registered.'})
   }
 
   // hash contraseña
@@ -24,7 +24,7 @@ const newUserCreatorInDB = async (req) => {
     email: req.body.email,
     password: newHashPassword,
     shkUsername: req.body.shkUsername,
-    playerLevel: req.body.level,
+    playerLevel: req.body.playerLevel,
     country: req.body.country,
     admin: req.body.admin || false,
     role: req.body.role,
