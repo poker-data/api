@@ -293,6 +293,33 @@ router.get("/getDefaultFilters", verifyToken, async (req, res) => {
 }
 )
 
+router.get("/getRegions", verifyToken, async (req, res) => {
+  try {
+
+    const regions = [
+      {region : 'Latam',},
+      {region : 'Colombia',},
+      {region : 'Venezuela',},
+      {region : 'Brasil',},
+      {region : 'España',},
+      {region : 'Francia',},
+      {region : 'Portugal',}
+    ];
+
+    res.status(200).json({
+      ok: true,
+      info: regions
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
 router.get("/getGroups", verifyToken, async (req, res) => {
   try {
     let services = [getGroupController()]
@@ -512,9 +539,9 @@ router.put("/users/:_id", verifyToken, async (req, res) => {
 
 router.post("/useredit/:_id", async (req, res) => {
   const { _id } = req.params;
-  const { email, shkUsername, playerLevel, admin } = req.body
+  const { email, shkUsername, playerLevel, admin, country } = req.body
   try {
-    let services = [updateUserInDb(_id, email, shkUsername, playerLevel, admin )]
+    let services = [updateUserInDb(_id, email, shkUsername, playerLevel, admin, country )]
     let [userData] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(err)

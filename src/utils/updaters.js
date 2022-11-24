@@ -10,14 +10,15 @@ const deleteUser = async (id) => {
       }
 }
 
-const updateUser = async (_id,email, shkUsername, playerLevel, admin ) => {
+const updateUser = async (_id,email, shkUsername, playerLevel, admin, country ) => {
     
     try {
         const userEdit = await User.findOneAndUpdate({ _id : _id }, {$set : {
             email : email,
             shkUsername : shkUsername,
             admin : admin,
-            playerLevel : playerLevel}})
+            playerLevel : playerLevel,
+            country: country}})
         console.log(userEdit)
     } catch (error) {
       return error

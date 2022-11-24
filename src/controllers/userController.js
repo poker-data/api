@@ -40,9 +40,9 @@ const deleteUserInDb = async (req) => {
   }
 }
 
-const updateUserInDb = async (_id,email, shkUsername, playerLevel, admin ) => {
+const updateUserInDb = async (_id,email, shkUsername, playerLevel, admin, country ) => {
   try {
-    const userUpdated = updateUser(_id, email, shkUsername, playerLevel, admin )   
+    const userUpdated = updateUser(_id, email, shkUsername, playerLevel, admin, country )   
     return userUpdated
   } catch (error) {
     return error
