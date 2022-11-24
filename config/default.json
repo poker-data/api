@@ -52,15 +52,23 @@
       ],
       "networkbyzone" : [
         {
-          "zones" : ["Argentina","Brasil"],
+          "zones" : ["Latam"],
           "networks" : "888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
         },
-        {"zones":["Colombia","Venezuela"],
-          "networks":"888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+        {"zones":["Colombia"],
+          "networks":"WPN%2CChico%2CWinamax.fr"
         },
         {
-          "zones" : ["España","Francia","Portugal"],
+          "zones":["Venezuela"],
+          "networks":"888Poker%2CChico%2CBCP%2CGGNetwork%2CPokerStars%2CPokerStars(FR-ES)"
+        },
+        {
+          "zones" : ["Francia","Portugal"],
           "networks" : "Chico%2CiPoker%2CWPN%2C888Poker(ES-PT)%2CiPoker(FR-ES)%2CPartyPoker(FR-ES)%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+        },
+        {
+          "zones":["España"],
+          "networks":"888Poker(ES-FR)%2CPartyPoker(ES-FR)%2CIpoker(ES-FR)%2CBCP%2CPokerstars(ES-FR)%2CChico%2CWinamax.fr"
         }
 
       ]

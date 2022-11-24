@@ -271,12 +271,10 @@ router.get("/getRooms", verifyToken, async (req, res) => {
 
 router.get("/getRegions", verifyToken, async (req, res) => {
   try {
-
     const regions = [
       {region : 'Latam',},
       {region : 'Colombia',},
       {region : 'Venezuela',},
-      {region : 'Brasil',},
       {region : 'España',},
       {region : 'Francia',},
       {region : 'Portugal',}
