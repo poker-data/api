@@ -268,6 +268,34 @@ router.get("/getRooms", verifyToken, async (req, res) => {
   }
 }
 )
+
+router.get("/getRegions", verifyToken, async (req, res) => {
+  try {
+
+    const regions = [
+      {region : 'Latam',},
+      {region : 'Colombia',},
+      {region : 'Venezuela',},
+      {region : 'Brasil',},
+      {region : 'España',},
+      {region : 'Francia',},
+      {region : 'Portugal',}
+    ];
+
+    res.status(200).json({
+      ok: true,
+      info: regions
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+}
+)
+
 router.get("/getDefaultFilters", verifyToken, async (req, res) => {
   try {
     

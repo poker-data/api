@@ -52,8 +52,11 @@
       ],
       "networkbyzone" : [
         {
-          "zones" : ["Argentina","Colombia","Venezuela","Brasil"],
+          "zones" : ["Argentina","Brasil"],
           "networks" : "888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+        },
+        {"zones":["Colombia","Venezuela"],
+          "networks":"888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
         },
         {
           "zones" : ["España","Francia","Portugal"],
