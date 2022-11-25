@@ -8,8 +8,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const newUserCreatorInDB = async (req) => {
+  const email = req.body.email.toLowerCase();
   const originalPassword = req.body.password
-  const isEmailExist = await User.findOne({ email: req.body.email });
+  const isEmailExist = await User.findOne({ email: email });
   try {
   if (isEmailExist) {
     return ({ error: 'Email already registered.'})
@@ -21,7 +22,7 @@ const newUserCreatorInDB = async (req) => {
 
   const user = new User({
     name: req.body.name,
-    email: req.body.email,
+    email: email,
     password: newHashPassword,
     shkUsername: req.body.shkUsername,
     playerLevel: req.body.playerLevel,
