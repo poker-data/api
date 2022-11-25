@@ -60,11 +60,11 @@
         },
         {
           "zones":["Venezuela"],
-          "networks":"888Poker%2CChico%2CBCP%2CGGNetwork%2CPokerStars%2CPokerStars(FR-ES)"
+          "networks":"888Poker%2CChico%2CGGNetwork%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
         },
         {
           "zones" : ["Francia","Portugal"],
-          "networks" : "Chico%2CiPoker%2CWPN%2C888Poker(ES-PT)%2CiPoker(FR-ES)%2CPartyPoker(FR-ES)%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
+          "networks" : "Chico%2CWPN%2C888Poker(ES-PT)%2CiPoker(FR-ES)%2CPartyPoker(FR-ES)%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
         },
         {
           "zones":["España"],
