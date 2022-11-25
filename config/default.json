@@ -52,7 +52,7 @@
       ],
       "networkbyzone" : [
         {
-          "zones" : ["Latam"],
+          "zones" : ["Latam","Argentina"],
           "networks" : "888Poker%2CChico%2CGGNetwork%2CiPoker%2CPartyPoker%2CPokerStars%2CWPN%2CPokerStars(FR-ES-PT)%2CWinamax.fr"
         },
         {"zones":["Colombia"],
