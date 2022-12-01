@@ -41,14 +41,14 @@ const findUserInDb = async (id) => {
   if(id){
     try {
       const userList = await User.find({_id : id})
-      return userList
+      return userList.filter(d => d.delete !== true)
     } catch (error) {
       return error
     }
   } else {
     try {
       const userList = await User.find()
-      return userList
+      return userList.filter(d => d.delete !== true)
     } catch (error) {
       return error
     }
