@@ -101,6 +101,7 @@ const apiUserMetaData = () => {
 
 
 const setApiPlayerFilters = (body) => {
+    console.log(body)
     return new Promise((resolve, reject) => {
         const playerName = body.shkUsername;
         const dateFrom = body.dateFrom || null;
@@ -116,6 +117,7 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}/statistics`;
         }
+        console.log(url)
         axios.get(url, {
             headers: {
                 Accept: 'application/json',

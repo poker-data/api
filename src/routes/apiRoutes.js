@@ -565,9 +565,9 @@ router.put("/users/:_id", verifyToken, async (req, res) => {
 
 router.post("/useredit/:_id", async (req, res) => {
   const { _id } = req.params;
-  const { email, shkUsername, playerLevel, admin, country } = req.body
+  const { email, shkUsername, playerLevel, admin, country, name } = req.body
   try {
-    let services = [updateUserInDb(_id, email, shkUsername, playerLevel, admin, country )]
+    let services = [updateUserInDb(_id, email, shkUsername, playerLevel, admin, country, name )]
     let [userData] = await Promise.all(services.map(service =>
       service.catch(err => {
         console.log(err)
