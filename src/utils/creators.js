@@ -4,6 +4,7 @@ const User = require("../models/user");
 const roomStatistics = require("../models/roomStatistics");
 const Group = require("../models/group");
 const StakeRange = require("../models/stakeRange");
+const NetworksByZone = require("../models/networksByZone");
 const { startSession } = require("../models/roomStatistics");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -117,6 +118,21 @@ const newStakeRangeCreatorInDB = async (info) => {
 }
 
 
+const newNetworksByZoneCreatorInDB = async (info) => {
+  try {
+    let newNetworksByZone = new NetworksByZone(info);
+    const response = await newNetworksByZone.save();
+    return response;
+  } catch (err) {
+    if (err.code === 11000) {
+      return 'A stake range with the same level already exists';
+    } else {
+      console.log(err, 'error saving group to db');
+      return err
+    }
+  }
+}
+
 const newPlayerCreatorInDB = async (req) => {
   const {
     playerName,
@@ -146,4 +162,5 @@ module.exports = {
   newGroupCreatorInDB,
   newUserCreatorInDB,
   newStakeRangeCreatorInDB,
+  newNetworksByZoneCreatorInDB,
 }

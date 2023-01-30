@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const StakeRange = require('../models/stakeRange')
+const NetworksByZone = require('../models/networksByZone')
 
 const deleteUser = async (id) => {
     try {
@@ -40,10 +41,23 @@ const updateStakeRangeInDB = async (_id, level, stakeRange ) => {
   }
 }
 
+const updateNetworksByZoneInDB = async (_id, zones, networks ) => {
+    
+  try {
+      let networksByZoneEdit = await NetworksByZone.findOneAndUpdate({ _id : _id }, {$set : {
+        zones: zones,
+        networks: networks,
+     }})
+    return networksByZoneEdit;
+  } catch (error) {
+    return error
+  }
+}
+
 
 module.exports = {
     deleteUser,
     updateUser,
     updateStakeRangeInDB,
-
+    updateNetworksByZoneInDB,
 }

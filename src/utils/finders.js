@@ -3,6 +3,7 @@ const RoomStats = require("../models/roomStatistics");
 const Group = require("../models/group");
 const User = require('../models/user');
 const StakeRange = require('../models/stakeRange');
+const NetworksByZone = require('../models/networksByZone');
 
 const findPlayersInDB = async () => {
 
@@ -47,6 +48,16 @@ const findStakeRangeInDB = async () => {
   }
 }
 
+const findNetworksByZoneInDB = async () => {
+  try {
+    const networksByZoneList = await NetworksByZone.find();
+    return networksByZoneList;
+    
+  } catch (error) {
+    return error
+  }
+}
+
 
 
 const findUserInDb = async (id) => {
@@ -85,4 +96,5 @@ module.exports = {
   findUserInDb,
   findUserInDbById,
   findStakeRangeInDB,
+  findNetworksByZoneInDB,
 }

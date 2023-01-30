@@ -19,6 +19,8 @@ const { findUserInDb } = require("../utils/finders");
 const { updateUserInDb, deleteUserInDb, getUserController } = require("../controllers/userController");
 const { setStakeRangeController, updateStakeRangeController, getStakeRangeController } = require("../controllers/stakeRangeController");
 
+const { setNetworksByZoneController, getNetworksByZoneController, updateNetworksByZoneController } = require("../controllers/networksByZoneController");
+
 require('dotenv').config()
 
 
@@ -444,8 +446,7 @@ router.get("/getStakeRange", verifyToken, async (req, res) => {
       info: error
     })
   }
-}
-)
+})
 
 
 router.post("/setStakeRange", verifyToken, async (req, res) => {
@@ -455,7 +456,7 @@ router.post("/setStakeRange", verifyToken, async (req, res) => {
 
     let [newStakeRange] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
+        console.log(err)
         return {
           ok: false,
           info: err
@@ -504,6 +505,96 @@ router.post("/updateStakeRange/:_id", async (req, res) => {
     })
   }
 });
+
+router.get("/getNetworksByZone", verifyToken, async (req, res) => {
+  try {
+    let services = [getNetworksByZoneController()]
+
+    let [networks] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+   if(networks?.length > 0 ){
+    res.status(200).json({
+      ok: true,
+      info: networks
+    })
+   }else{
+    res.status(400).json({
+      ok: false,
+      info: networks
+    })
+   }
+  
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
+
+router.post("/updateNetworksByZone/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const { zones, networks } = req.body
+  try {
+    let services = [updateNetworksByZoneController(_id, zones, networks )]
+    let [networksByZoneData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: networksByZoneData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
+
+router.post("/setNetworksByZone", verifyToken, async (req, res) => {
+  try {
+
+    let services = [setNetworksByZoneController(req)]
+
+    let [newNetworksByZone] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newNetworksByZone
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
 
 router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
 
