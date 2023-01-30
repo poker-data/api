@@ -48,6 +48,10 @@
         {
           "level" : "8",
           "stakeRange" : "30~129"
+        },
+        {
+          "level" : "9",
+          "stakeRange" : "40~250"
         }
       ],
       "networkbyzone" : [
