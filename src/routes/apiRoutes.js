@@ -17,6 +17,7 @@ const {remainingRequestsController} = require("../controllers/infoController");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const { findUserInDb } = require("../utils/finders");
 const { updateUserInDb, deleteUserInDb, getUserController } = require("../controllers/userController");
+const { setStakeRangeController, updateStakeRangeController, getStakeRangeController } = require("../controllers/stakeRangeController");
 
 require('dotenv').config()
 
@@ -388,7 +389,7 @@ router.post("/setGroup", verifyToken, async (req, res) => {
 
     let [newGroup] = await Promise.all(services.map(service =>
       service.catch(err => {
-        console.log(error)
+        console.log(err)
         return {
           ok: false,
           info: err
@@ -402,7 +403,42 @@ router.post("/setGroup", verifyToken, async (req, res) => {
      })
 
   } catch (error) {
-    //console.log(error)
+    console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
+
+
+router.get("/getStakeRange", verifyToken, async (req, res) => {
+  try {
+    let services = [getStakeRangeController()]
+
+    let [stakeRange] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+   if(stakeRange?.length > 0 ){
+    res.status(200).json({
+      ok: true,
+      info: stakeRange
+    })
+   }else{
+    res.status(400).json({
+      ok: false,
+      info: stakeRange
+    })
+   }
+  
+  }
+  catch (error) {
     res.status(400).json({
       ok: false,
       info: error
@@ -410,6 +446,64 @@ router.post("/setGroup", verifyToken, async (req, res) => {
   }
 }
 )
+
+
+router.post("/setStakeRange", verifyToken, async (req, res) => {
+  try {
+
+    let services = [setStakeRangeController(req)]
+
+    let [newStakeRange] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(error)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newStakeRange
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
+
+
+router.post("/updateStakeRange/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const { level, stakeRange } = req.body
+  try {
+    let services = [updateStakeRangeController(_id, level, stakeRange )]
+    let [stakeRangeData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: stakeRangeData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
 
 router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
 

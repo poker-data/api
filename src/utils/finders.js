@@ -1,7 +1,8 @@
 const Player = require("../models/player");
 const RoomStats = require("../models/roomStatistics");
 const Group = require("../models/group");
-const User = require('../models/user')
+const User = require('../models/user');
+const StakeRange = require('../models/stakeRange');
 
 const findPlayersInDB = async () => {
 
@@ -24,17 +25,29 @@ const findRoomStatsInDB = async () => {
     return error
   }
 }
+
+
 const findGroupsInDB = async () => {
     try {
-     // console.log("llegue")
       const groupList = await Group.find();
-      //console.log(groupList, "groupList")
       return groupList;
       
     } catch (error) {
       return error
     }
 }
+
+const findStakeRangeInDB = async () => {
+  try {
+    const stakeRangeList = await StakeRange.find();
+    return stakeRangeList;
+    
+  } catch (error) {
+    return error
+  }
+}
+
+
 
 const findUserInDb = async (id) => {
   
@@ -70,5 +83,6 @@ module.exports = {
   findRoomStatsInDB,
   findGroupsInDB,
   findUserInDb,
-  findUserInDbById
+  findUserInDbById,
+  findStakeRangeInDB,
 }
