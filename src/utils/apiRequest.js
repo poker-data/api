@@ -101,7 +101,6 @@ const apiUserMetaData = () => {
 
 
 const setApiPlayerFilters = (body) => {
-    console.log(body)
     return new Promise((resolve, reject) => {
         const playerName = body.shkUsername;
         const dateFrom = body.dateFrom || null;
@@ -117,7 +116,6 @@ const setApiPlayerFilters = (body) => {
         } else {
             url = `${url}/${playerName}/statistics`;
         }
-        console.log(url)
         axios.get(url, {
             headers: {
                 Accept: 'application/json',
@@ -272,12 +270,9 @@ const setApiTournamentsFilters = (body) => {
     return new Promise((resolve, reject) => {
         const playerLevel = body.playerLevel;
         const playerCountry = body.playerCountry;
-        console.log(playerLevel)
-        console.log(playerCountry)
         
         let networks;
         config.get('networkbyzone').map(element => {
-            console.log(element)
             if (element.zones.some(el => el === playerCountry)) {
                 networks = element.networks
             }
@@ -291,14 +286,11 @@ const setApiTournamentsFilters = (body) => {
        
         config.get('playerLevels').map(element => {
         if(element.level === playerLevel) {
-            console.log(element, 'element')
-            console.log(playerLevel, 'playerLevel')
             stakeRange = element.stakeRange
         }
         })
         
         url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD'}${stakeRange}${';Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
-        console.log(url)
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD1~5;Guarantee:USD1~2500;Type:H,NL;Type!:TI;Type!:C,DN,HIT,SAT,TI,TN;TournamentName!:Sat;Date!:1D;Class:SCHEDULED'}`;
         //url = `${url}${'?Filter=Entrants:2~*;StakePlusRake:USD0.8~6;Guarantee:USD0~2500;Type:H,NL;Type!:C,DN,HIT,SAT,TI,TN;Date!:1D;Class:SCHEDULED'}`;
         axios.get(url, {
