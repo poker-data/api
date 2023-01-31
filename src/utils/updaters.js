@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const StakeRange = require('../models/stakeRange')
 const NetworksByZone = require('../models/networksByZone')
+const ExcludedKeywords = require('../models/excludedKeywords')
 
 const deleteUser = async (id) => {
     try {
@@ -55,9 +56,22 @@ const updateNetworksByZoneInDB = async (_id, zones, networks ) => {
 }
 
 
+const updateExcludedKeywordsInDB = async (_id, keyword ) => {
+    
+  try {
+      let excludedKeywordsEdit = await ExcludedKeywords.findOneAndUpdate({ _id : _id }, {$set : {
+        keyword: keyword,
+     }})
+    return excludedKeywordsEdit;
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
     deleteUser,
     updateUser,
     updateStakeRangeInDB,
     updateNetworksByZoneInDB,
+    updateExcludedKeywordsInDB,
 }

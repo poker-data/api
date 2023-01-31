@@ -1,6 +1,6 @@
-const { findPlayersInDB, findRoomStatsInDB, findGroupsInDB, findUserInDbById, findStakeRangeInDB, findNetworksByZoneInDB } = require('./finders')
-const { newStatsCreatorInDB, newUserCreatorInDB , newPlayerCreatorInDB, newRoomStatsCreatorInDB, newGroupCreatorInDB, newStakeRangeCreatorInDB, newNetworksByZoneCreatorInDB } = require('./creators')
-const { deleteUser, updateUser, updateStakeRangeInDB, updateNetworksByZoneInDB } = require('./updaters')
+const { findPlayersInDB, findRoomStatsInDB, findGroupsInDB, findUserInDbById, findStakeRangeInDB, findNetworksByZoneInDB, findExcludedKeywordsInDB } = require('./finders')
+const { newStatsCreatorInDB, newUserCreatorInDB , newPlayerCreatorInDB, newRoomStatsCreatorInDB, newGroupCreatorInDB, newStakeRangeCreatorInDB, newNetworksByZoneCreatorInDB, newExcludedKeywordsCreatorInDB } = require('./creators')
+const { deleteUser, updateUser, updateStakeRangeInDB, updateNetworksByZoneInDB, updateExcludedKeywordsInDB } = require('./updaters')
 const { apiPlayerStatistics, apiUserMetaData, setApiPlayerFilters } = require('./apiRequest')
 const { loginUser } = require('./login')
 
@@ -25,5 +25,8 @@ module.exports = {
     updateStakeRangeInDB,
     findNetworksByZoneInDB,
     newNetworksByZoneCreatorInDB,
-    updateNetworksByZoneInDB
+    updateNetworksByZoneInDB,
+    findExcludedKeywordsInDB,
+    newExcludedKeywordsCreatorInDB, 
+    updateExcludedKeywordsInDB,
 }

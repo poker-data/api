@@ -7,19 +7,15 @@ const {
   tournamentsFiltersFromApi,
 } = require("../controllers/playerStatsController");
 const { newPlayerController, findPlayersController } = require("../controllers/playerController");
-
 const {findRoomStatsController, setRoomStatsController} = require("../controllers/roomStatsController");
-
 const { getGroupController, setGroupController } = require("../controllers/groupController");
-
 const {remainingRequestsController} = require("../controllers/infoController");
-
 const { verifyToken } = require("../middlewares/authMiddleware");
 const { findUserInDb } = require("../utils/finders");
 const { updateUserInDb, deleteUserInDb, getUserController } = require("../controllers/userController");
 const { setStakeRangeController, updateStakeRangeController, getStakeRangeController } = require("../controllers/stakeRangeController");
-
 const { setNetworksByZoneController, getNetworksByZoneController, updateNetworksByZoneController } = require("../controllers/networksByZoneController");
+const { setExcludedKeywordsController, getExcludedKeywordsController, updateExcludedKeywordsController } = require("../controllers/excludedKeywordsController");
 
 require('dotenv').config()
 
@@ -506,6 +502,8 @@ router.post("/updateStakeRange/:_id", async (req, res) => {
   }
 });
 
+
+//Obtenemos la lista de las zonas y sus salas
 router.get("/getNetworksByZone", verifyToken, async (req, res) => {
   try {
     let services = [getNetworksByZoneController()]
@@ -540,6 +538,7 @@ router.get("/getNetworksByZone", verifyToken, async (req, res) => {
   }
 })
 
+//Actualizamos la zona y sus salas
 router.post("/updateNetworksByZone/:_id", async (req, res) => {
   const { _id } = req.params;
   const { zones, networks } = req.body
@@ -567,6 +566,7 @@ router.post("/updateNetworksByZone/:_id", async (req, res) => {
   }
 });
 
+//Seteamos una nueva zona y sus respectivas salas
 router.post("/setNetworksByZone", verifyToken, async (req, res) => {
   try {
 
@@ -595,6 +595,100 @@ router.post("/setNetworksByZone", verifyToken, async (req, res) => {
     })
   }
 })
+
+//Obtenemos lista de palabras claves excluidas para filtros
+router.get("/getExcludedKeywords", verifyToken, async (req, res) => {
+  try {
+    let services = [getExcludedKeywordsController()]
+
+    let [keywords] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+   if(keywords?.length > 0 ){
+    res.status(200).json({
+      ok: true,
+      info: keywords
+    })
+   }else{
+    res.status(400).json({
+      ok: false,
+      info: keywords
+    })
+   }
+  
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
+
+//Seteamos una nueva palabra clave excluida para filtros
+router.post("/setExcludedKeywords", verifyToken, async (req, res) => {
+  try {
+
+    let services = [setExcludedKeywordsController(req)]
+
+    let [newExcludedKeywords] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+
+    res.status(200).json({ 
+      ok: true, 
+      info: newExcludedKeywords
+     })
+
+  } catch (error) {
+    //console.log(error)
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+})
+
+//Actualizamos la palabra clave excluida para filtros
+
+router.post("/updateExcludedKeywords/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const { keyword } = req.body
+  try {
+    let services = [updateExcludedKeywordsController(_id, keyword )]
+    let [keywordsData] = await Promise.all(services.map(service =>
+      service.catch(err => {
+        console.log(err)
+        return {
+          ok: false,
+          info: err
+        }
+      })
+    ))
+    res.status(200).json({
+      ok: true,
+      info: keywordsData
+    })
+  }
+  catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error
+    })
+  }
+});
 
 router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
 
@@ -625,6 +719,7 @@ router.post("/getDefaultGroupFiltersData", verifyToken, async (req, res) => {
   }
 
 });
+
 
 router.post("/getTournamentsData", verifyToken, async (req, res) => {
 

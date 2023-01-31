@@ -4,6 +4,7 @@ const Group = require("../models/group");
 const User = require('../models/user');
 const StakeRange = require('../models/stakeRange');
 const NetworksByZone = require('../models/networksByZone');
+const ExcludedKeywords = require('../models/excludedKeywords');
 
 const findPlayersInDB = async () => {
 
@@ -59,6 +60,16 @@ const findNetworksByZoneInDB = async () => {
 }
 
 
+const findExcludedKeywordsInDB = async () => {
+  try {
+    const excludedKeywordsList = await ExcludedKeywords.find();
+    return excludedKeywordsList;
+    
+  } catch (error) {
+    return error
+  }
+}
+
 
 const findUserInDb = async (id) => {
   
@@ -97,4 +108,5 @@ module.exports = {
   findUserInDbById,
   findStakeRangeInDB,
   findNetworksByZoneInDB,
+  findExcludedKeywordsInDB,
 }

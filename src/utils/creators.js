@@ -5,6 +5,7 @@ const roomStatistics = require("../models/roomStatistics");
 const Group = require("../models/group");
 const StakeRange = require("../models/stakeRange");
 const NetworksByZone = require("../models/networksByZone");
+const ExcludedKeywords = require("../models/excludedKeywords");
 const { startSession } = require("../models/roomStatistics");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -125,7 +126,23 @@ const newNetworksByZoneCreatorInDB = async (info) => {
     return response;
   } catch (err) {
     if (err.code === 11000) {
-      return 'A stake range with the same level already exists';
+      return 'A Network with the same name already exists';
+    } else {
+      console.log(err, 'error saving group to db');
+      return err
+    }
+  }
+}
+
+
+const newExcludedKeywordsCreatorInDB = async (info) => {
+  try {
+    let newExcludedKeywords = new ExcludedKeywords(info);
+    const response = await newExcludedKeywords.save();
+    return response;
+  } catch (err) {
+    if (err.code === 11000) {
+      return 'A Excluded Word with the same name already exists';
     } else {
       console.log(err, 'error saving group to db');
       return err
@@ -163,4 +180,5 @@ module.exports = {
   newUserCreatorInDB,
   newStakeRangeCreatorInDB,
   newNetworksByZoneCreatorInDB,
+  newExcludedKeywordsCreatorInDB,
 }
