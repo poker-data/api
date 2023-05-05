@@ -10,7 +10,7 @@ const getConnectionString = async () => {
   const dbHost = process.env.DATABASE_HOST;
   const dbName = process.env.DB_NAME;
   //   TODO: alternative of setting up env variables through env.yaml or .env
-  connectionString = `mongodb+srv://bbz-api:${dbPassword}@bbzlatamapp-api.uool30b.mongodb.net/`;
+  connectionString = `mongodb+srv://${dbUser}:${dbPassword}@bbzlatamapp-api.uool30b.mongodb.net/`;
   console.log("=========== connectionString ===>  " + connectionString + "  ================== ")
   return connectionString;
 };
