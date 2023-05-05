@@ -32,7 +32,6 @@ const dbMongoose = () => {
       reject("incorrect mongo connection string");
     }
     const promiseInitialize = new Promise(async (resolve, reject) => {
-      mongoose.set('useFindAndModify', true);
       mongoose.set("strictQuery", false);
       mongoose
         .connect(connectionString)
