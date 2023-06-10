@@ -1,16 +1,11 @@
 var mongoose = require("mongoose");
 
-const HOSTS_RX =
-  /(mongodb(?:\+srv|)):\/\/(?: (?:[^:]*) (?: : ([^@]*) )? @ )?([^/?]*)(?:\/|)(.*)/;
+
 const getConnectionString = async () => {
-  //   const fileExists = await filePathExists(desiredFile);
-  let connectionString;
+  let connectionString ="mongodb+srv://<username>:<password>@bbzlatamapp-api.uool30b.mongodb.net/?retryWrites=true&w=majority"
   const dbPassword = process.env.DATABASE_PASSWORD;
   const dbUser = process.env.DATABASE_USER;
-  const dbHost = process.env.DATABASE_HOST;
-  const dbName = process.env.DB_NAME;
-  //   TODO: alternative of setting up env variables through env.yaml or .env
-  connectionString = `mongodb+srv://${dbUser}:${dbPassword}@bbzlatamapp-api.uool30b.mongodb.net/`;
+  connectionString = connectionString.replace("<username>", dbUser).replace("<password>", dbPassword);
   console.log("=========== connectionString ===>  " + connectionString + "  ================== ")
   return connectionString;
 };
