@@ -15,6 +15,8 @@ const newUserController = async (req) => {
 
 const loginUserController = async (req) => {
   try {
+    const { email, password } = req.body;
+    if (!email || !password) return false;
     const token = await loginUser(req);
     return token;
   } catch (error) {
