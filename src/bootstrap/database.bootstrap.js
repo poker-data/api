@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-
+const HOSTS_RX =
+  /(mongodb(?:\+srv|)):\/\/(?: (?:[^:]*) (?: : ([^@]*) )? @ )?([^/?]*)(?:\/|)(.*)/;
 
 const getConnectionString = async () => {
   let connectionString ="mongodb+srv://<username>:<password>@bbzlatamapp-api.uool30b.mongodb.net/?retryWrites=true&w=majority"
