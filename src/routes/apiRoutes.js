@@ -359,7 +359,7 @@ router.get("/getGroups", verifyToken, async (req, res) => {
       })
     ))
    if(!Array.isArray(groups)) groups = []
-   if(groups?.length > 0 ){
+   if(groups.length > 0 ){
     res.status(200).json({
       ok: true,
       info: groups
