@@ -2,12 +2,12 @@ var mongoose = require("mongoose");
 const HOSTS_RX =
   /(mongodb(?:\+srv|)):\/\/(?: (?:[^:]*) (?: : ([^@]*) )? @ )?([^/?]*)(?:\/|)(.*)/;
 
-const getConnectionString = async () => {
-  let connectionString ="mongodb+srv://<username>:<password>@bbzlatamapp-api.uool30b.mongodb.net/?retryWrites=true&w=majority"
+const getConnectionString = () => {
+  let connectionString ="mongodb+srv://<username>:<password>@bbzlatamapp-api.uool30b.mongodb.net/<dbName>?retryWrites=true&w=majority"
   const dbPassword = process.env.DATABASE_PASSWORD;
-  const dbUser = process.env.DATABASE_USER;
-  connectionString = connectionString.replace("<username>", dbUser).replace("<password>", dbPassword);
-  console.log("=========== connectionString ===>  " + connectionString + "  ================== ")
+  const dbUser = process.env.DATABASE_USER
+  const dbName = process.env.DB_NAME
+  connectionString = connectionString.replace("<username>", dbUser).replace("<password>", dbPassword).replace("<dbName>", dbName);
   return connectionString;
 };
 
@@ -20,7 +20,7 @@ const dbMongoose = () => {
     }
   }
   async function initialize() {
-    const connectionString = await getConnectionString();
+    const connectionString =  getConnectionString();
     console.log(connectionString);
     const cap = connectionString.match(HOSTS_RX);
     if (!cap) {

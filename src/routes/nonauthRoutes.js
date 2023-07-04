@@ -15,10 +15,10 @@ router.get("/health-check", (req, res) => {
     try {
       const token = await loginUserController(req);
       console.log(token)
-      if(!token) {
+      if(!token ) {
         res.status(400).json({
           ok: false,
-          info: "Invalid credentials"
+          info: "Invalid credentials or user not exist"
         })
       } else {
         res.header('auth-token', token).json({
@@ -37,6 +37,7 @@ router.get("/health-check", (req, res) => {
 
 router.post("/register",async (req, res) => {
   try {
+    console.log("llegando")
     const newUser = await newUserController(req);
     res.status(200).json({
       ok: true,

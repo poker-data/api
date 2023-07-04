@@ -5,7 +5,8 @@
     "main": "app.js",
     "scripts": {
         "start": "nodemon ./src/init.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "babel src -d dist"
     },
     "engines": {
         "node": ">=15.8.0"
@@ -24,6 +25,9 @@
         "xml2js": "^0.4.23"
     },
     "devDependencies": {
+        "@babel/cli": "^7.22.6",
+        "@babel/core": "^7.22.6",
+        "@babel/preset-env": "^7.22.6",
         "nodemon": "^2.0.16"
     }
 }

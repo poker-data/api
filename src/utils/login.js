@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const loginUser = async (req) => {
     const email = req.body.email.toLowerCase();
     const user = await User.findOne({ email: email });
+    console.log(user, 'user')
     if (!user) return false;
 
     const originalPassword = req.body.password;

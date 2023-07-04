@@ -3,66 +3,63 @@ const Player = require("../models/player");
 const User = require("../models/user");
 const roomStatistics = require("../models/roomStatistics");
 const Group = require("../models/group");
-const { startSession } = require("../models/roomStatistics");
+const {
+  startSession
+} = require("../models/roomStatistics");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-const newUserCreatorInDB = async (req) => {
+const newUserCreatorInDB = async req => {
   const email = req.body.email.toLowerCase();
-  const originalPassword = req.body.password
-  const isEmailExist = await User.findOne({ email: email }).catch((err) => {console.log(err)});
+  const originalPassword = req.body.password;
+  const isEmailExist = await User.findOne({
+    email: email
+  }).catch(err => {
+    console.log(err);
+  });
   try {
     if (isEmailExist) {
-      return ({ error: 'Email already registered.'})
+      return {
+        error: 'Email already registered.'
+      };
     }
-    
+
     // hash contraseña
-    console.log(originalPassword, 'originalPassword')
+    console.log(originalPassword, 'originalPassword');
     const salt = await bcrypt.genSalt(10);
-    console.log(salt, 'salt')
+    console.log(salt, 'salt');
     const newHashPassword = await bcrypt.hash(originalPassword, salt);
-    
-  const user = new User({
-    name: req.body.name,
-    email: email,
-    password: newHashPassword,
-    shkUsername: req.body.shkUsername,
-    playerLevel: req.body.playerLevel,
-    country: req.body.country,
-    admin: req.body.admin || false,
-    role: req.body.role,
-  });
- 
+    const user = new User({
+      name: req.body.name,
+      email: email,
+      password: newHashPassword,
+      shkUsername: req.body.shkUsername,
+      playerLevel: req.body.playerLevel,
+      country: req.body.country,
+      admin: req.body.admin || false,
+      role: req.body.role
+    });
     const savedUser = await user.save();
-    return savedUser
+    return savedUser;
   } catch (error) {
-    console.log(error)
-    return error
+    console.log(error);
+    return error;
   }
-}
-
+};
 const newStatsCreatorInDB = async (playerName, stats) => {
-
   try {
-
     const newStats = new playerStatistics({
       tempStats: stats,
-      playerName,
+      playerName
     });
     const response = await newStats.save();
     //console.log(response, 'saving to db');
-    return response
-
+    return response;
   } catch (err) {
-
     console.log(err, 'error saving to db');
   }
-}
-
-const newRoomStatsCreatorInDB = async (stats) => {
-
+};
+const newRoomStatsCreatorInDB = async stats => {
   try {
-
     const roomStats = new roomStatistics({
       username: stats.username,
       room: stats.room,
@@ -79,59 +76,49 @@ const newRoomStatsCreatorInDB = async (stats) => {
       itmpercent: stats.itmpercent,
       reqbankroll: stats.reqbankroll,
       winningdays: stats.winningdays,
-      losingdays: stats.losingdays,
+      losingdays: stats.losingdays
     });
     const response = await roomStats.save();
     //console.log(response, 'saving to db');
-    return response
-
+    return response;
   } catch (err) {
-
     console.log(err, 'error saving to db');
   }
-}
-
-const newGroupCreatorInDB = async (stats) => {
-
-console.log(stats)
+};
+const newGroupCreatorInDB = async stats => {
+  console.log(stats);
   try {
-
     let newGroup = new Group(stats);
     const response = await newGroup.save();
     console.log(response);
     return response;
   } catch (err) {
     console.log(err, 'error saving group to db');
-    return err
+    return err;
   }
-}
-
-const newPlayerCreatorInDB = async (req) => {
+};
+const newPlayerCreatorInDB = async req => {
   const {
     playerName,
-    shkUsername,
+    shkUsername
   } = req.body;
-
   try {
-
     let newPlayer = new Player({
       playerName,
-      shkUsername,
+      shkUsername
     });
     const response = await newPlayer.save();
     console.log(response);
     return response;
   } catch (err) {
     console.log(err, 'error saving user to db');
-    return err
+    return err;
   }
-}
-
-
+};
 module.exports = {
   newStatsCreatorInDB,
   newPlayerCreatorInDB,
   newRoomStatsCreatorInDB,
   newGroupCreatorInDB,
   newUserCreatorInDB
-}
+};

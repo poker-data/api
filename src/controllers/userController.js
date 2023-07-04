@@ -26,6 +26,7 @@ const loginUserController = async (req) => {
 
 const getUserController = async (req) => {
   try {
+    console.log(req)
     const userList = await findUserInDbById(req);
     return userList
   } catch(error){
