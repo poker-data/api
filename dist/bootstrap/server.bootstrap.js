@@ -1,6 +1,6 @@
 var http = require("http");
 /* app setup */
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 8081;
 const hostname = "127.0.0.1";
 
 // ice factory
