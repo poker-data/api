@@ -12,7 +12,7 @@ const { getGroupController, setGroupController } = require("../controllers/group
 const {remainingRequestsController} = require("../controllers/infoController");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const { findUserInDb } = require("../utils/finders");
-const { updateUserInDb, deleteUserInDb, getUserController } = require("../controllers/userController");
+const { updateUserInDb, deleteUserInDb, getUserController, loginUserController, newUserController } = require("../controllers/userController");
 const { setStakeRangeController, updateStakeRangeController, getStakeRangeController } = require("../controllers/stakeRangeController");
 const { setNetworksByZoneController, getNetworksByZoneController, updateNetworksByZoneController } = require("../controllers/networksByZoneController");
 const { setExcludedKeywordsController, getExcludedKeywordsController, updateExcludedKeywordsController } = require("../controllers/excludedKeywordsController");
@@ -22,6 +22,47 @@ require('dotenv').config()
 
 router.get("/health-check" ,(req, res) => {
   res.json({ status: "health-ok" });
+});
+
+
+
+router.post("/login", async (req, res) => {
+  try {
+    const token = await loginUserController(req);
+    if(!token) {
+      res.status(400).json({
+        ok: false,
+        info: "Invalid credentials"
+      })
+    } else {
+      res.header('auth-token', token).json({
+        ok: true,
+        info: token
+    })
+    }
+    
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      info: error,
+    });
+  }
+});
+
+router.post("/register",async (req, res) => {
+try {
+  const newUser = await newUserController(req);
+  res.status(200).json({
+    ok: true,
+    info: newUser,
+  });
+} catch (error) {
+  res.status(400).json({
+    ok: false,
+    info: error,
+  });
+}
+
 });
 
 

@@ -20,13 +20,11 @@ app.use(cors());
 app.use(express.static(__dirname + "/public"));
 
 /*Routers used*/
-const nonauthRoutes = require("./routes/nonauthRoutes");
 const apiRoutes = require("./routes/apiRoutes");
 
 /*Routes*/
-app.use("/", nonauthRoutes);
 app.use("/api/", apiRoutes);
-
+  
 /* Invalid routes final middleware */
 app.use(function (_, res) {
   res.json({ status: "inexistent" });
